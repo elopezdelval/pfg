@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>La Grupeta | Perfil</title>
+   <link rel="icon" type="image/png" href="/img/Logo.png">
+
+   <link rel="stylesheet" href="/src/styles/styles.css">
+   <script type="module" src="/src/scripts/perfil.js"></script>
+</head>
+
+<body>
+   <!-- Fondo y menú de navegación -->
+   <div class="fondo"></div>
+   <h1 class="tituloPagina">Editar perfil</h1>
+   <nav class="navBar">
+      <div class="logoTitulo">
+         <img src="/img/Logo.png" alt="logo" class="logo" />
+         <span class="titulo">La Grupeta</span>
+      </div>
+
+      <div class="divMenu">
+            <ul class="menu" id="menu">
+                <li><a href="/miActividad.html" class="menuLink">Mi actividad</a></li>
+                <li><a href="/crearQuedada.html" class="menuLink">Crear quedada</a></li>
+                <li><a href="/tablon.html" class="menuLink">Tablón</a></li>
+                <li><a href="/perfil.html" class="menuLink">Perfil</a></li>
+            </ul>
+            <a href="/correo.html"><img src="/img/correo.png" alt="correo" id="correo"></a>
+            <button type="button" id="desplegable">☰</button>
+        </div>
+   </nav>
+   <!-- Formulario de actualización de avatar y perfil -->
+   <form action="" id="formPerfil" method="POST" enctype="multipart/form-data">
+      <label for="fotoPerfil" class="avatar">
+         <img src="/img/avatar.png" alt="Foto de perfil" id="vistaPrevia">
+         <span>cambia tu avatar</span>
+      </label>
+      <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" hidden>
+
+      <label for="usuario">Usuario</label>
+      <input id="usuario" name="usuario" type="text">
+
+      <label for="email">Correo electrónico</label>
+      <input id="email" name="email" type="text">
+
+      <fieldset class="cambiarUbicacion">
+         <legend>Cambiar ubicación</legend>
+
+         <label for="pais">País</label>
+         <select name="pais" id="pais">
+            <option value="" disabled selected>Tu país de residencia</option>
+         </select>
+
+         <label for="region">Región</label>
+         <select name="region" id="region">
+            <option value="" disabled selected>-</option>
+         </select>
+      </fieldset>
+      <fieldset class="cambiarPass">
+         <legend>Cambiar contraseña</legend>
+         <label for="pass">Contraseña actual</label>
+         <input id="pass" name="pass" type="password" placeholder="contraseña actual">
+
+         <label for="newPass">Nueva contraseña</label>
+         <input id="newPass" name="newPass" type="password" placeholder="nueva contraseña">
+
+         <label for="confirmNewPass">Confirmar contraseña</label>
+         <input id="confirmNewPass" name="confirmNewPass" type="password" placeholder="confirma nueva contraseña">
+      </fieldset>
+
+      <button id="registro" type="submit">Actualizar perfil</button>
+      <span id="actualizado"></span>
+   </form>
+   <footer>
+        <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>
+    </footer>
+</body>
+
+</html>

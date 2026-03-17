@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>La Grupeta | Tablón</title>
+   <link rel="icon" type="image/png" href="/img/Logo.png">
+
+
+  <script type="module" crossorigin src="/assets/tablon-CyvznQNw.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/assets/cargarMapa-h4iCbl94.js">
+  <link rel="modulepreload" crossorigin href="/assets/nav-KAznTAmI.js">
+  <link rel="modulepreload" crossorigin href="/assets/region-MV78zg_W.js">
+  <link rel="modulepreload" crossorigin href="/assets/htmlQuedada-BVXzeCZq.js">
+  <link rel="stylesheet" crossorigin href="/assets/cargarMapa-CIGW-MKW.css">
+  <link rel="stylesheet" crossorigin href="/assets/styles-DZNJZ_Wl.css">
+</head>
+
+<body>
+   <!-- Fondo y menú de navegación -->
+   <div class="fondo"></div>
+   <nav class="navBar">
+      <div class="logoTitulo">
+         <img src="/img/Logo.png" alt="logo" class="logo" />
+         <span class="titulo">La Grupeta</span>
+      </div>
+
+      <div class="divMenu">
+            <ul class="menu" id="menu">
+                <li><a href="/miActividad.html" class="menuLink">Mi actividad</a></li>
+                <li><a href="/crearQuedada.html" class="menuLink">Crear quedada</a></li>
+                <li><a href="/tablon.html" class="menuLink">Tablón</a></li>
+                <li><a href="/perfil.html" class="menuLink">Perfil</a></li>
+            </ul>
+            <a href="/correo.html"><img src="/img/correo.png" alt="correo" id="correo"></a>
+            <button type="button" id="desplegable">☰</button>
+        </div>
+   </nav>
+   <main>
+      <h1 class="tituloPagina">Encuentra tu quedada</h1>
+
+      <div id="contenedorMapa">
+         <div id="mapaTablon"></div>
+         <button id="cerrarMapa">X</button>
+         <button id="guardarRuta">guardar ruta</button>
+      </div>
+
+      <form action="" id="filtros">
+         <fieldset>
+            <legend id="leyenda">filtros ▼</legend>
+            <div id="filtros-container">
+               <div>
+                  <label for="actividad">Actividad</label>
+                  <select name="actividad" id="actividad">
+                     <option value="" disabled selected>Elige tu deporte</option>
+                     <option value="ciclismo">Ciclismo</option>
+                     <option value="running">Running</option>
+                     <option value="senderismo">Senderismo</option>
+                  </select>
+               </div>
+
+               <div>
+                  <label for="fechas">selecciona un rango de fechas</label>
+                  <input type="date" name="desde" id="desde">
+                  <input type="date" name="hasta" id="hasta">
+               </div>
+
+               <div>
+                  <label for="provincia">selecciona tu región</label>
+                  <select name="pais" id="pais">
+                     <option value="" disabled selected>Elige el país</option>
+                  </select>
+                  <select name="region" id="region">
+                     <option value="" disabled selected>-</option>
+                  </select>
+               </div>
+               <div class="botonesFiltros">
+                  <button type="button" id="botonFiltrar">aplicar filtros</button>
+                  <button type="reset">Limpiar filtros</button>
+               </div>
+            </div>
+         </fieldset>
+      </form>
+      <section id="quedadas">
+
+      </section>
+      <footer>
+        <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>
+    </footer>
+   </main>
+</body>
+
+</html>

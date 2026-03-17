@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>La Grupeta | Mi Actividad</title>
+   <link rel="icon" type="image/png" href="/img/Logo.png">
+
+   <link rel="stylesheet" href="/src/styles/styles.css">
+
+   <script type="module" src="/src/scripts/miActividad.js"></script>
+</head>
+
+<body>
+   <!-- Fondo y menú de navegación -->
+   <div class="fondo"></div>
+   <nav class="navBar">
+      <div class="logoTitulo">
+         <img src="/img/Logo.png" alt="logo" class="logo" />
+         <span class="titulo">La Grupeta</span>
+      </div>
+
+      <div class="divMenu">
+            <ul class="menu" id="menu">
+                <li><a href="/miActividad.html" class="menuLink">Mi actividad</a></li>
+                <li><a href="/crearQuedada.html" class="menuLink">Crear quedada</a></li>
+                <li><a href="/tablon.html" class="menuLink">Tablón</a></li>
+                <li><a href="/perfil.html" class="menuLink">Perfil</a></li>
+            </ul>
+            <a href="/correo.html"><img src="/img/correo.png" alt="correo" id="correo"></a>
+            <button type="button" id="desplegable">☰</button>
+        </div>
+   </nav>
+   <main>
+      <h1 class="tituloPagina">Mi actividad</h1>
+
+      <div id="contenedorMapa">
+         <div id="mapaTablon"></div>
+         <button id="cerrarMapa">X</button>
+         <button id="guardarRuta">guardar ruta</button>
+      </div>
+
+      <button type="button" id="quedadas_rutas">ver rutas guardadas</button>
+      <section id="misQuedadas">
+         
+      </section>
+      <section id="misRutas">
+
+      </section>
+   </main>
+   <footer>
+        <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+{
+  "name": "pfg",
+  "version": "1.0.0",
+  "description": "Proyecto académico para la asignatura de proyecto final de DAW. El objetivo del proyecto es la creación de salidas deportivas (ciclismo, running, senderismo). Se van a utilizar leaflet y graphhopper para la edición de rutas en un mapa que se podrán añadir a las quedadas.",
+  "main": "index.js",
+  "dependencies": {
+    "ansi-regex": "^5.0.1",
+    "ansi-styles": "^4.3.0",
+    "chalk": "^4.1.2",
+    "cliui": "^8.0.1",
+    "color-convert": "^2.0.1",
+    "color-name": "^1.1.4",
+    "concurrently": "^8.2.2",
+    "cookie": "^0.7.2",
+    "cookie-parser": "^1.4.7",
+    "cookie-signature": "^1.0.6",
+    "date-fns": "^2.30.0",
+    "emoji-regex": "^8.0.0",
+    "escalade": "^3.2.0",
+    "get-caller-file": "^2.0.5",
+    "globals": "^17.3.0",
+    "has-flag": "^4.0.0",
+    "iceberg-js": "^0.8.1",
+    "is-fullwidth-code-point": "^3.0.0",
+    "lodash": "^4.17.23",
+    "require-directory": "^2.1.1",
+    "rxjs": "^7.8.2",
+    "shell-quote": "^1.8.3",
+    "spawn-command": "^0.0.2",
+    "string-width": "^4.2.3",
+    "strip-ansi": "^6.0.1",
+    "supports-color": "^8.1.1",
+    "tree-kill": "^1.2.2",
+    "tslib": "^2.8.1",
+    "undici-types": "^7.18.2",
+    "wrap-ansi": "^7.0.0",
+    "ws": "^8.19.0",
+    "y18n": "^5.0.8",
+    "yargs": "^17.7.2",
+    "yargs-parser": "^21.1.1"
+  },
+  "scripts": {
+        "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run dev --prefix backend\""
+    },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elopezdelval/PFG.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elopezdelval/PFG/issues"
+  },
+  "homepage": "https://github.com/elopezdelval/PFG#readme"
+}

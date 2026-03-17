@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Grupeta | Registro</title>
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+
+  <script type="module" crossorigin src="/assets/registro-udCqCS0c.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/assets/region-MV78zg_W.js">
+  <link rel="stylesheet" crossorigin href="/assets/styles-DZNJZ_Wl.css">
+</head>
+
+<body>
+    <!-- Fondo y menú de navegación -->
+    <div class="fondo"></div>
+    <nav class="navBar">
+        <div class="logoTitulo">
+            <img src="/img/Logo.png" alt="logo" class="logo" />
+            <span class="titulo">La Grupeta</span>
+        </div>
+        <ul>
+            <li><a href="/index.html" class="menuLink">Inicio</a></li>
+        </ul>
+    </nav>
+    <h1 class="tituloPagina">Únete a nuestra comunidad</h1>
+    <!-- Formulario de registro -->
+    <form action="#" id="formRegistro" novalidate>
+        <label for="nombre">Nombre completo*</label>
+        <input id="nombre" name="nombre" type="text" placeholder="tu nombre" required>
+
+        <label for="usuario">Usuario*</label>
+        <input id="usuario" name="usuario" type="text" placeholder="tu nickname" required>
+        <span class="error"></span>
+
+        <label for="email">e-mail*</label>
+        <input id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" required>
+        <span class="error"></span>
+
+        <label for="pass">Contraseña*</label>
+        <input id="pass" name="pass" type="password" placeholder="no uses tu cumpleaños..." required>
+        <span class="error"></span>
+
+        <label for="fecha_nacimiento">Fecha de nacimiento</label>
+        <input id="fecha_nacimiento" name="fecha_nacimiento" type="date">
+
+        <fieldset>
+            <legend>Región/provincia</legend>
+
+            <label for="pais">País</label>
+            <select name="pais" id="pais">
+                <option value="" disabled selected>Tu país de residencia</option>
+            </select>
+
+            <label for="region">Región</label>
+            <select name="region" id="region">
+                <option value="" disabled selected>-</option>
+            </select>
+        </fieldset>
+
+
+        <label class="politica" for="privacidad">
+            <input type="checkbox" name="privacidad" id="privacidad">
+            Acepto la política de privacidad
+        </label>
+        <span class="error"></span>
+
+        <button id="registro" type="submit">Enviar</button>
+        <span id="registrado"></span>
+    </form>
+    <footer>
+        <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>
+    </footer>
+</body>
+
+</html>
