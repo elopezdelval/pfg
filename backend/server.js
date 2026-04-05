@@ -28,7 +28,7 @@ endpointsMensajeria(app, db);
 
 //Servimos el build generado en el front y cargamos index.html como página de inicio.
 
-/* const __filename = fileURLToPath(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rutaDist = path.join(__dirname, "../frontend/dist");
 
@@ -36,7 +36,7 @@ app.use(express.static(rutaDist));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(rutaDist, "index.html"));
-}); */
+});
 
 app.listen(puerto, () => {
   console.log(`Servidor escuchando en http://localhost:${puerto}`);
