@@ -17,7 +17,8 @@ export default defineConfig({
         registro: 'registro.html',
         tablon: 'tablon.html',
         miActividad: 'miActividad.html',
-        perfil: 'perfil.html'
+        perfil: 'perfil.html',
+        correo: 'correo.html'
       }
     }
   }

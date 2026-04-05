@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Grupeta | Correo</title>
+    <link rel="icon" type="image/png" href="/img/Logo.png">
+
+
+  <script type="module" crossorigin src="/assets/correo-DGQP_rW5.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  <link rel="modulepreload" crossorigin href="/assets/nav-DsLoPI2G.js">
+  <link rel="stylesheet" crossorigin href="/assets/styles-BwQtaLSq.css">
+</head>
+
+<body>
+    <!-- Fondo y menú de navegación -->
+    <div class="fondo"></div>
+    <nav class="navBar">
+        <div class="logoTitulo">
+            <img src="/img/Logo.png" alt="logo" class="logo" />
+            <span class="titulo">La Grupeta</span>
+        </div>
+
+        <div class="divMenu">
+            <ul class="menu" id="menu">
+                <li><a href="/miActividad.html" class="menuLink">Mi actividad</a></li>
+                <li><a href="/crearQuedada.html" class="menuLink">Crear quedada</a></li>
+                <li><a href="/tablon.html" class="menuLink">Tablón</a></li>
+                <li><a href="/perfil.html" class="menuLink">Perfil</a></li>
+            </ul>
+            <a href="/correo.html"><img src="/img/correo.png" alt="correo" id="correo"></a>
+            <button type="button" id="desplegable">☰</button>
+        </div>
+    </nav>
+    <h1 class="tituloPagina">Mensajes recibidos</h1>
+    <main class="correoContainer">
+        <form action="" id="formRedactar">
+            <button type="button" id="cerrarRedactar">X</button>
+
+            <label for="destinatarioRedactar">Destinatario</label>
+            <input type="text" id="destinatarioRedactar" name="destinatarioRedactar">
+
+            <label for="asuntoRedactar">Asunto</label>
+            <input type="text" id="asuntoRedactar" name="asuntoRedactar">
+
+            <label for="mensajeRedactar">Mensaje</label>
+            <textarea name="mensajeRedactar" id="mensajeRedactar"></textarea>
+
+            <button type="button" id="enviarMensaje">Enviar</button>
+        </form>
+        <div id="contenedorMensaje">
+
+        </div>
+        <ul class="menuCorreo">
+            <li><button id="redactarCorreo">Redactar</button></li>
+            <li class="correoLink">Enviados</li>
+            <li class="correoLink">Recibidos</li>
+            <li class="correoLink">Papelera</li>
+        </ul>
+        <div class="contenedorBuzones">
+            <div id="recibidos">
+                
+            </div>
+            <div id="enviados">
+                
+            </div>
+            <div id="eliminados">
+                
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a
+                href="">elopezdelval@gmail.com</a></span>
+    </footer>
+</body>
+
+</html>
