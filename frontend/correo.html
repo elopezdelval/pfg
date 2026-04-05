@@ -32,7 +32,44 @@
             <button type="button" id="desplegable">☰</button>
         </div>
     </nav>
-    <h1 class="tituloPagina">Correo</h1>
+    <h1 class="tituloPagina">Mensajes recibidos</h1>
+    <main class="correoContainer">
+        <form action="" id="formRedactar">
+            <button type="button" id="cerrarRedactar">X</button>
+
+            <label for="destinatarioRedactar">Destinatario</label>
+            <input type="text" id="destinatarioRedactar" name="destinatarioRedactar">
+
+            <label for="asuntoRedactar">Asunto</label>
+            <input type="text" id="asuntoRedactar" name="asuntoRedactar">
+
+            <label for="mensajeRedactar">Mensaje</label>
+            <textarea name="mensajeRedactar" id="mensajeRedactar"></textarea>
+
+            <button type="button" id="enviarMensaje">Enviar</button>
+        </form>
+        <div id="contenedorMensaje">
+
+        </div>
+        <ul class="menuCorreo">
+            <li><button id="redactarCorreo">Redactar</button></li>
+            <li class="correoLink">Enviados</li>
+            <li class="correoLink">Recibidos</li>
+            <li class="correoLink">Papelera</li>
+        </ul>
+        <div class="contenedorBuzones">
+            <div id="recibidos">
+                
+            </div>
+            <div id="enviados">
+                
+            </div>
+            <div id="eliminados">
+                
+            </div>
+        </div>
+
+    </main>
 
     <footer>
         <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a

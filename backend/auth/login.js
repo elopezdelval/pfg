@@ -16,7 +16,7 @@ export default function login(app, db) {
           return res.status(401).json({ error: 'El usuario no existe' });
         }
 
-        //Verificamos si la contraseña coincide y si es así, generamos el token y lo enviamos dentro de una cookie
+        //Verificamos si la contraseña coincide y si es así, generamos el token y lo enviamos en una cookie con la respuesta
 
         return bcrypt.compare(credenciales.pass, respuesta.rows[0].pass)
           .then((coincide) => {

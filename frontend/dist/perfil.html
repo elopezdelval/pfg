@@ -7,11 +7,11 @@
    <title>La Grupeta | Perfil</title>
    <link rel="icon" type="image/png" href="/img/Logo.png">
 
-  <script type="module" crossorigin src="/assets/perfil-CNmUkrGp.js"></script>
+  <script type="module" crossorigin src="/assets/perfil-DoV0t_oH.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/nav-KAznTAmI.js">
   <link rel="modulepreload" crossorigin href="/assets/region-MV78zg_W.js">
-  <link rel="stylesheet" crossorigin href="/assets/styles-DZNJZ_Wl.css">
+  <link rel="stylesheet" crossorigin href="/assets/styles-BRWD8VFl.css">
 </head>
 
 <body>
@@ -37,17 +37,27 @@
    </nav>
    <!-- Formulario de actualización de avatar y perfil -->
    <form action="" id="formPerfil" method="POST" enctype="multipart/form-data">
-      <label for="fotoPerfil" class="avatar">
-         <img src="/img/avatar.png" alt="Foto de perfil" id="vistaPrevia">
-         <span>cambia tu avatar</span>
-      </label>
-      <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" hidden>
+      <div class="avatarContainer">
+         <label for="fotoPerfil" class="avatar">
+            <img src="/img/avatar.png" alt="Foto de perfil" id="vistaPrevia">
+            <span>cambia tu avatar</span>
+         </label>
+         <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" hidden>
+         
+         <button type="button" id="guardarAvatar">Actualizar avatar</button>
+      </div>
 
       <label for="usuario">Usuario</label>
       <input id="usuario" name="usuario" type="text">
 
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" name="nombre" type="text">
+
       <label for="email">Correo electrónico</label>
       <input id="email" name="email" type="text">
+
+      <label for="fechaNacimiento">Fecha de nacimiento</label>
+      <input id="fechaNacimiento" name="fechaNacimiento" type="date">
 
       <fieldset class="cambiarUbicacion">
          <legend>Cambiar ubicación</legend>
@@ -74,8 +84,7 @@
          <input id="confirmNewPass" name="confirmNewPass" type="password" placeholder="confirma nueva contraseña">
       </fieldset>
 
-      <button id="registro" type="submit">Actualizar perfil</button>
-      <span id="actualizado"></span>
+      <button id="actualizarPerfil" type="button">Actualizar perfil</button>
    </form>
    <footer>
         <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>

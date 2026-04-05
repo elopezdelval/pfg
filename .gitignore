@@ -8,3 +8,6 @@ backend/.env
 
 # Temporary files
 problemas_seguridad.md
+posibles_mejoras.md
+-xss-.md
+.codex
