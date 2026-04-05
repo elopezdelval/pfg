@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css               */import{i as I}from"./nav-DsLoPI2G.js";function b(s,n,t){let a="";t==="recibidos"&&!s.leido&&(a=" noLeido");let o="";return t!="eliminados"&&(o=`<button class="eliminarMensaje" data-bandeja="${t}" data-id="${s.id}">eliminar</button>`),`<article class="mensaje${a}">
+import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css               */import{i as I}from"./nav-DbOgtR5d.js";function b(s,n,t){let a="";t==="recibidos"&&!s.leido&&(a=" noLeido");let o="";return t!="eliminados"&&(o=`<button class="eliminarMensaje" data-bandeja="${t}" data-id="${s.id}">eliminar</button>`),`<article class="mensaje${a}">
     <p class="mensaje-encabezado">${new Date(s.fecha_envio).toLocaleString()} - ${s.asunto}</p>
     <p class="mensaje-quien">de ${s.remitente} para ${s.destinatario}</p>
     <div class="mensaje-botones">

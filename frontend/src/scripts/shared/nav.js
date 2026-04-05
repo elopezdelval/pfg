@@ -27,7 +27,7 @@ export default function iniciarNav() {
         }
       });
       if (mensajesNuevos === true) {
-        correo.style.animation = "tienesCorreo 2s 1s";
+        correo.style.animation = "tienesCorreo 4s 1s";
       }
     });
 }

@@ -1,4 +1,4 @@
-import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css               */import{L as g,c as y}from"./cargarMapa-h4iCbl94.js";import{i as b}from"./nav-DsLoPI2G.js";import{h as E}from"./htmlQuedada-BVXzeCZq.js";function f(r,o){return`<article class="ruta">                
+import"./modulepreload-polyfill-B5Qt9EMX.js";/* empty css               */import{L as g,c as y}from"./cargarMapa-h4iCbl94.js";import{i as b}from"./nav-DbOgtR5d.js";import{h as E}from"./htmlQuedada-BVXzeCZq.js";function f(r,o){return`<article class="ruta">                
     <span class="ruta-encabezado">Región: ${r.region}</span>    
     <span>distancia: ${(r.distancia/1e3).toFixed(1)}km</span>
     <button class="verRuta" data-indice="${o}">ruta</button>
