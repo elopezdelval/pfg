@@ -8,6 +8,21 @@ import htmlRuta from "./shared/htmlRuta.js";
 document.addEventListener("DOMContentLoaded", () => {
   iniciarNav();
 
+  const feedbackDialog = document.getElementById("feedbackDialog");
+  const respuestaDialog = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
+  
+  function mostrarDialog(mensaje) {
+    respuestaDialog.textContent = mensaje;
+    feedbackDialog.showModal();
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedbackDialog.close();
+  });
+
   //capturamos el boton y asignamos el evento para mostrar mis rutas / mis quedadas
 
   const botonRutas = document.getElementById("quedadas_rutas");
@@ -59,16 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
             quedadas[i].avatar_url = "/img/avatar.png";
           }
 
-          misQuedadas.insertAdjacentHTML(
-            "beforeend",
-            htmlQuedada(quedadas[i], i, apuntarse),
-          );
+          misQuedadas.appendChild(htmlQuedada(quedadas[i], i, apuntarse));
         }
       }
     })
-    .catch((err) => {
-      misQuedadas.innerText = err.message;
-      console.log(err);
+    .catch(() => {
+      mostrarDialog("Error obteniendo quedadas / rutas");
     });
 
   //Cargamos el mapa y capturamos los botones del mapa
@@ -77,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedorMapa = document.getElementById("contenedorMapa");
   const cerrarMapa = document.getElementById("cerrarMapa");
   const guardarRuta = document.getElementById("guardarRuta");
-  contenedorMapa.style.display = "none";
 
   misQuedadas.addEventListener("click", (event) => {
     //si se pulsa ver ruta se muestra el mapa con la ruta de la quedada
@@ -116,14 +126,11 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((r) => {
           rutas.push(r);
-          console.log(rutas);
-          misRutas.insertAdjacentHTML(
-            "beforeend",
-            htmlRuta(rutas[rutas.length - 1], rutas.length - 1),
-          );
+          misRutas.appendChild(htmlRuta(rutas[rutas.length - 1], rutas.length - 1));
+          mostrarDialog("Ruta guardada");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          mostrarDialog("error guardando ruta");
         });
     });
 
@@ -154,9 +161,18 @@ document.addEventListener("DOMContentLoaded", () => {
             event.target.parentElement.parentElement.remove();
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          mostrarDialog("error al desapuntarse de una quedada");
         });
+    }
+
+    //Si se pulsa enviar mensaje a organizador, redirigimos a mensajes con el organizador en destinatario
+
+    if (event.target.classList.contains("enviarMensaje")) {
+      const indice = parseInt(event.target.dataset.indice);
+      const organizador = quedadas[indice].organizador;
+
+      window.location.href = `/correo.html?organizador=${organizador}`;
     }
   });
 
@@ -176,13 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < rutas.length; i++) {
         if (rutas[i].guardada) {
-          misRutas.insertAdjacentHTML("beforeend", htmlRuta(rutas[i], i));
+          misRutas.appendChild(htmlRuta(rutas[i], i));
         }
       }
     })
-    .catch((err) => {
-      misRutas.innerText = err.message;
-      console.log(err);
+    .catch(() => {
+      mostrarDialog("Error obteniendo quedadas / rutas");
     });
 
   //Capturamos los clics en el mis rutas para añadir las funciones a los botones de las rutas
@@ -230,9 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
             event.target.parentElement.remove();
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch(() => {});
     }
 
     //Si se pulsa reutilizar ruta, se redirige a la pagina de crear quedada con el id de la ruta en la url para poder cargarla en crear quedada

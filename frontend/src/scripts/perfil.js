@@ -1,4 +1,3 @@
-import urlAvatar from "./shared/cargarAvatar.js";
 import iniciarNav from "./shared/nav.js";
 import { selectorRegion, obtenerRegiones } from "./shared/region.js";
 
@@ -12,35 +11,77 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const avatar = document.getElementById("fotoPerfil");
   const vistaPrevia = document.getElementById("vistaPrevia");
+  const feedbackDialog = document.getElementById("feedbackDialog");
+  const respuestaDialog = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario
+
+  function mostrarDialog(mensaje) {
+    respuestaDialog.textContent = mensaje;
+    feedbackDialog.showModal();
+  }
+
+  //Dado que partes de la validación requerirían hacer peticiones al back, he preferido no hacerlas en front y duplicarlas en back, por lo que voy a usar los mensajes de error del back para el feedback, asique defino una función para leerlas y si no las hay, dar un mensaje estandar
+
+  function leerRespuesta(res, mensajeEstandar) {
+    return res.json()
+      .then(datos => ({
+        ok: res.ok,
+        mensaje: datos?.message || mensajeEstandar,
+        datos,
+      }))
+      .catch(() => ({
+        ok: res.ok,
+        mensaje: mensajeEstandar,
+        datos: null,
+      }));
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedbackDialog.close();
+  });
 
   //Cargamos el avatar del usuario en caso de tenerlo
 
-  urlAvatar().then((r) => {
-    if (r[0].avatar_url) {
-      vistaPrevia.src = r[0].avatar_url;
-    }
-  });
+  fetch("/api/auth/urlAvatar?id=undefined")
+    .then((res) => leerRespuesta(res, "error al cargar los avatares"))
+    .then(({ ok, mensaje, datos }) => {
+      if (!ok) {
+        mostrarDialog(mensaje);
+        return;
+      }
+
+      if (datos?.[0]?.avatar_url) {
+        vistaPrevia.src = datos[0].avatar_url;
+      }
+    })
+    .catch(() => {
+      mostrarDialog("error al cargar los avatares");
+    });
 
   //Cargamos los datos del usuario en los campos correspondientes
 
   fetch("/api/auth/datosUsuario")
-    .then((r) => {
-      if (!r.ok) {
-        throw new Error("No se han podido obtener los datos de usuario");
+    .then((res) => leerRespuesta(res, "No se han podido obtener los datos de usuario"))
+    .then(({ ok, mensaje, datos }) => {
+      if (!ok) {
+        mostrarDialog(mensaje);
+        return;
       }
-      return r.json();
-    })
-    .then((datos) => {
+
       form.usuario.value = datos.usuario;
       form.nombre.value = datos.nombre;
       form.email.value = datos.email;
       form.fechaNacimiento.value = datos.fecha_nacimiento.split("T")[0];
       form.pais.value = datos.codigo_pais;
       obtenerRegiones(datos.codigo_pais)
-        .then((r) => {
+        .then(() => {
           form.region.value = datos.region_id;
-        })
-        .catch((err) => console.log(err));
+        });
+    })
+    .catch(() => {
+      mostrarDialog("No se han podido obtener los datos de usuario");
     });
 
   //Cuando el usuario carga una imagen para el avatar, la mostramos en la vista previa
@@ -62,7 +103,14 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch("/api/auth/cambiarAvatar", {
         method: "PUT",
         body: imagen,
-      });
+      })
+        .then((res) => leerRespuesta(res, "No se ha podido subir el avatar"))
+        .then(({ mensaje }) => {
+          mostrarDialog(mensaje);
+        })
+        .catch(() => {
+          mostrarDialog("No se ha podido subir el avatar");
+        });
     }
   });
 
@@ -88,13 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
       if (form.newPass.value === form.confirmNewPass.value) {
         if (!passRegex.test(form.newPass.value)) {
           datosCorrectos = false;
-          console.log(
+          mostrarDialog(
             "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial",
           );
         }
       } else {
         datosCorrectos = false;
-        console.log("las contraseñas no coinciden");
+        mostrarDialog("las contraseñas no coinciden");
       }
     }
 
@@ -102,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!emailRegex.test(form.email.value)) {
       datosCorrectos = false;
-      console.log("formato de email incorrecto");
+      mostrarDialog("formato de email incorrecto");
     }
 
     if (datosCorrectos) {
@@ -119,16 +167,13 @@ document.addEventListener("DOMContentLoaded", () => {
           region: form.region.value,
         }),
       })
-      .then((r) => {
-        if (!r.ok) {
-            console.log('error modificar los datos')
-        } else {
-            console.log('datos mofidicados correctamente')
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        .then((res) => leerRespuesta(res, "No se ha podido modificar el perfil"))
+        .then(({ mensaje }) => {
+          mostrarDialog(mensaje);
+        })
+        .catch(() => {
+          mostrarDialog("No se ha podido modificar el perfil");
+        });
     }
   });
 });

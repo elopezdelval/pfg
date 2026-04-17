@@ -1,4 +1,4 @@
-import { selectorRegion, obtenerRegiones } from "./shared/region.js";
+import { selectorRegion } from "./shared/region.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   selectorRegion();
@@ -7,7 +7,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("formRegistro");
   const error = document.getElementsByClassName("error");
-  const registrado = document.getElementById("registrado");
+  const feedbackDialog = document.getElementById("feedbackDialog");
+  const respuestaDialog = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
+  
+  function mostrarDialog(mensaje) {
+    respuestaDialog.textContent = mensaje;
+    feedbackDialog.showModal();
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedbackDialog.close();
+  });
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -23,13 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let mensaje of error) {
       mensaje.textContent = "";
     }
-    registrado.textContent = "";
 
     //usamos la validación de html para campos requeridos y pasamos las validaciones
 
     if (!form.checkValidity()) {
-      registrado.style.color = "red";
-      registrado.textContent = "Los campos marcados con un * son obligatorios";
+      mostrarDialog("Los campos marcados con un * son obligatorios");
     } else {
 
     //lo primero confirmamos que el nombre no está en uso y a partir de ahí las regex y la política
@@ -72,23 +83,21 @@ document.addEventListener("DOMContentLoaded", () => {
               })
               .then(res => {
                 if (res.ok) {
-                    registrado.textContent = 'usuario registrado correctamente';
+                    mostrarDialog("usuario registrado correctamente");
                 } else {
-                    registrado.textContent = 'error en el servidor';
+                    mostrarDialog("error en el servidor");
                 }
                 return
               })
-              .catch(err => {
-                console.log(err);
-                registrado.textContent = 'error de red';
+              .catch(() => {
+                mostrarDialog("error de red");
               })
             }
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           formularioValido = false;
-          registrado.textContent = 'Error de red';
+          mostrarDialog("Error de red");
         });
     }
   });

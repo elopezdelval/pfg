@@ -1,13 +1,28 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import iniciarNav from "./shared/nav.js";
-import { selectorRegion, obtenerRegiones }from "./shared/region.js";
+import { selectorRegion }from "./shared/region.js";
 import cargarMapa from "./shared/cargarMapa.js";
 import htmlQuedada from "./shared/htmlQuedada.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   iniciarNav();
   selectorRegion();
+
+  const feedbackDialog = document.getElementById("feedbackDialog");
+  const respuestaDialog = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
+
+  function mostrarDialog(mensaje) {
+    respuestaDialog.textContent = mensaje;
+    feedbackDialog.showModal();
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedbackDialog.close();
+  });
 
   //Menú de filtros desplegable
 
@@ -58,15 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
           quedadas[i].avatar_url = '/img/avatar.png';
         }
 
-        tablon.insertAdjacentHTML(
-          "beforeend",
-          htmlQuedada(quedadas[i], i, apuntarse),
-        );
+        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse));
       }
     })
-    .catch((err) => {
-      tablon.innerText = err.message;
-      console.log(err);
+    .catch(() => {
+      mostrarDialog("Error cargando las quedadas");
     });
 
   //Aplicamos filtros y volvemos a pintar las quedadas en el tablón
@@ -95,10 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           apuntarse = "apuntarse";
         }
-        tablon.insertAdjacentHTML(
-          "beforeend",
-          htmlQuedada(quedadas[i], i, apuntarse),
-        );
+        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse));
       }
     }
   });
@@ -107,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const contenedorMapa = document.getElementById("contenedorMapa");
   const cerrarMapa = document.getElementById("cerrarMapa");
   const guardarRuta = document.getElementById("guardarRuta");
-  contenedorMapa.style.display = "none";
 
   //capturamos clicks en el tablon para manejar los botones de ver ruta y apuntarse
 
@@ -146,9 +153,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return r.json();
           }
         })
-        .then((r) => {console.log('ruta guardada:', r)})
-        .catch((err) => {
-          console.log(err);
+        .then(() => {
+          mostrarDialog("ruta guardada");
+        })
+        .catch(() => {
+          mostrarDialog("error guardando ruta");
         });
     });
 
@@ -184,9 +193,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          mostrarDialog("error al apuntarse / desapuntarse");
         });
+    }
+
+    //Si se pulsa enviar mensaje a organizador, redirigimos a mensajes con el organizador en destinatario
+
+    if (event.target.classList.contains("enviarMensaje")) {
+      const indice = parseInt(event.target.dataset.indice);
+      const organizador = quedadas[indice].organizador;
+
+      window.location.href = `/correo.html?organizador=${organizador}`;
     }
   });
 });

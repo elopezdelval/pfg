@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     alerta.textContent = "";
 
+    //Validamos que estén rellenos los campos y hacemos la petición al back para el login
+    
     if (!formulario.checkValidity()) {
       alerta.textContent = "Introduzca sus credenciales para acceder";
     } else {
@@ -41,8 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "../../tablon.html";
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           alerta.textContent = "Error de red";
         });
     }

@@ -17,6 +17,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const mensajeRedactar = document.getElementById("mensajeRedactar");
   const titulo = document.querySelector(".tituloPagina");
   const cerrarRedactar = document.getElementById('cerrarRedactar');
+  const feedback = document.getElementById("feedbackDialog");
+  const alerta = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
+  
+  function mostrarDialog(mensaje) {
+    alerta.textContent = mensaje;
+    feedback.showModal();
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedback.close();
+  });
 
   //declaramos arrays para dividir los mensajes en los diferentes tablones.
 
@@ -33,24 +47,15 @@ document.addEventListener("DOMContentLoaded", () => {
     eliminados.innerHTML = "";
 
     for (let i = 0; i < mensajesRecibidos.length; i++) {
-      recibidos.insertAdjacentHTML(
-        "beforeend",
-        htmlMensaje(mensajesRecibidos[i], i, "recibidos"),
-      );
+      recibidos.appendChild(htmlMensaje(mensajesRecibidos[i], i, "recibidos"));
     }
 
     for (let i = 0; i < mensajesEnviados.length; i++) {
-      enviados.insertAdjacentHTML(
-        "beforeend",
-        htmlMensaje(mensajesEnviados[i], i, "enviados"),
-      );
+      enviados.appendChild(htmlMensaje(mensajesEnviados[i], i, "enviados"));
     }
 
     for (let i = 0; i < mensajesEliminados.length; i++) {
-      eliminados.insertAdjacentHTML(
-        "beforeend",
-        htmlMensaje(mensajesEliminados[i], i, "eliminados"),
-      );
+      eliminados.appendChild(htmlMensaje(mensajesEliminados[i], i, "eliminados"));
     }
   }
 
@@ -83,8 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
         mensajes = r;
         clasificarMensajes();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        mostrarDialog("No se han podido cargar los mensajes");
       });
   }
 
@@ -93,10 +98,18 @@ document.addEventListener("DOMContentLoaded", () => {
   recibidos.style.display = "block";
   enviados.style.display = "none";
   eliminados.style.display = "none";
-  formRedactar.style.display = "none";
-  contenedorMensaje.style.display = "none";
   titulo.textContent = "Mensajes recibidos";
   cargarMensajes();
+
+  //Si llegamos a correo con organizador como parámetro, abrimos el formulario para redactar con el nombre del organizador ya anotado
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const organizador = urlParams.get("organizador");
+
+  if (organizador) {
+    formRedactar.style.display = "block"
+    formRedactar.destinatarioRedactar.value = organizador;
+  }
 
   // Al pulsar redactar mostramos el formulario para redactar un mensaje.
 
@@ -129,19 +142,30 @@ document.addEventListener("DOMContentLoaded", () => {
   //declaramos la función para pintar un mensaje
 
   function verMensaje(mensaje) {
-      contenedorMensaje.innerHTML = `
-      <p class="mensaje-encabezado">${new Date(mensaje.fecha_envio).toLocaleString()} - ${mensaje.asunto || "(sin asunto)"}</p>
-      <p class="mensaje-quien">de ${mensaje.remitente} para ${mensaje.destinatario}</p>
-      <p>de ${mensaje.cuerpo}</p>
-      <button type="button" id="cerrarMensaje">cerrar</button>
-      `;
-      
-      contenedorMensaje.style.display = "block";
-      
-      document.getElementById("cerrarMensaje").addEventListener("click", () => {
-          contenedorMensaje.style.display = "none";
-        });
-    }
+    contenedorMensaje.replaceChildren();
+
+    const encabezado = document.createElement("p");
+    encabezado.className = "mensaje-encabezado";
+    encabezado.textContent = `${new Date(mensaje.fecha_envio).toLocaleString()} - ${mensaje.asunto || "(sin asunto)"}`;
+
+    const meta = document.createElement("p");
+    meta.className = "mensaje-quien";
+    meta.textContent = `de ${mensaje.remitente} para ${mensaje.destinatario}`;
+
+    const cuerpo = document.createElement("p");
+    cuerpo.textContent = mensaje.cuerpo;
+
+    const cerrar = document.createElement("button");
+    cerrar.type = "button";
+    cerrar.id = "cerrarMensaje";
+    cerrar.textContent = "cerrar";
+    cerrar.addEventListener("click", () => {
+      contenedorMensaje.style.display = "none";
+    });
+
+    contenedorMensaje.append(encabezado, meta, cuerpo, cerrar);
+    contenedorMensaje.style.display = "block";
+  }
     
     //declaramos una función para obtener el mensaje que toque del array que toque en función de la bandeja y del índice que tenga el dataset
 
@@ -192,11 +216,23 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             return r.json();
           })
-          .then(() => {
-            cargarMensajes();
+          .then((datos) => {
+            const id = parseInt(event.target.dataset.id);
+            const mensaje = mensajes.find(m => m.id === id);
+
+            if (mensaje.es_destinatario) {
+              mensaje.eliminado_destinatario = true;
+            }
+            if (mensaje.es_remitente) {
+              mensaje.eliminado_remitente = true;
+            }
+            
+            mostrarDialog(datos.message || "Mensaje eliminado");
+
+            clasificarMensajes();
           })
-          .catch((err) => {
-            console.log(err);
+          .catch(() => {
+            mostrarDialog("Error al eliminar el mensaje");
           });
       }
     });
@@ -220,17 +256,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return r.json();
       })
-      .then(() => {
+      .then((datos) => {
+        mostrarDialog(datos.message || "Mensaje enviado");
         formRedactar.reset();
         formRedactar.style.display = "none";
         cargarMensajes();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        mostrarDialog("Error al enviar el mensaje");
       });
   });
 
-  //Añadimos un evento para quitar el formulario pulsando escape
+  //Añadimos eventos para cerrar el formulario de envío de correo con el cerrar y dando la tecla escape
 
   document.addEventListener('keydown', (event) => {
     if (formRedactar.style.display != "none" && event.key === 'Escape') {

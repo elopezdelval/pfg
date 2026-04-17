@@ -5,16 +5,31 @@ import { selectorRegion, obtenerRegiones } from "./shared/region.js";
 import caminoGH from "./shared/caminoGH.js";
 import cargarMapa from "./shared/cargarMapa.js";
 
-const form = document.getElementById("formQuedada");
-const error = document.getElementById("error");
-const distanciaRuta = document.getElementById("distanciaRuta");
-const borrarTramo = document.getElementById("borrarTramo");
-const borrarTodo = document.getElementById("borrarTodo");
-const guardarQuedada = document.getElementById("crearQuedada");
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  const form = document.getElementById("formQuedada");
+  const distanciaRuta = document.getElementById("distanciaRuta");
+  const borrarTramo = document.getElementById("borrarTramo");
+  const borrarTodo = document.getElementById("borrarTodo");
+  const guardarQuedada = document.getElementById("crearQuedada");
+  const feedback = document.getElementById("feedbackDialog");
+  const alerta = document.getElementById("respuestaDialog");
+  const cerrarDialog = document.getElementById("cerrarDialog");
+  
   iniciarNav();
   selectorRegion();
+
+  //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
+  
+  function mostrarDialog(mensaje) {
+    alerta.textContent = mensaje;
+    feedback.showModal();
+  }
+
+  cerrarDialog.addEventListener("click", () => {
+    feedback.close();
+  });
 
   let deporte = "foot";
   let coordAnterior = null;
@@ -51,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .then((r) => {
             form.region.value = ruta.region_id;
           })
-          .catch((err) => console.log(err));
+          .catch(() => {});
 
         //Lo segundo cargamos el layer que toque, dibujamos la ruta y ajustamos la vista a la ruta
 
@@ -73,8 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
           lng: ruta.ruta.coordenadas[ruta.ruta.coordenadas.length - 1][1],
         };
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         cargarMapa(mapa, "");
       });
   } else {
@@ -149,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => {
           console.error(err);
-          alert("Error obteniendo el tramo");
+          mostrarDialog("Error obteniendo el tramo");
         });
     }
   });
@@ -189,7 +203,17 @@ document.addEventListener("DOMContentLoaded", () => {
       ritmo: form.ritmo.value,
       descripcion: form.descripcion.value,
     };
-    console.log(ruta, quedada);
+
+    if (!Array.isArray(ruta.coordenadas) || ruta.coordenadas.length < 2) {
+      mostrarDialog("La ruta debe incluir al menos dos coordenadas");
+      return;
+    }
+
+    if (!quedada.fecha || !quedada.actividad || !quedada.region) {
+      mostrarDialog("Fecha, actividad y región son campos obligatorios");
+      return;
+    }
+
     fetch("/api/auth/guardarQuedada", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -200,11 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((r) => {
         if (!r.ok) {
-          error.textContent = "Error guardando la quedada, intentelo más tarde";
+          mostrarDialog("Error guardando la quedada, intentelo más tarde");
           throw new Error("Error guardando la quedada");
         }
-        error.textContent = "Quedada creada correctamente";
+        mostrarDialog("Quedada creada correctamente");
       })
-      .catch((err) => console.log(err));
+      .catch(() => {});
   });
 });
