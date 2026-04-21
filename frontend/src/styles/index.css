@@ -45,7 +45,7 @@ h1 {
    animation: opacidad 2s ease 0.5s reverse both;
 }
 
-p {
+h2 {
    font-size: 1.8em;
    color: #fff;
    text-align: center;
@@ -59,11 +59,12 @@ button {
    color:#fff;
    border: none;
    display: block;
-   background-color: #00000090;
+   background-color: #000000ee;
+   box-shadow: 2px 2px 5px black;
 }
 
 button:hover {
-   background-color: #ffffff10;
+   background-color: #414141;
 }
 
 .botones {
@@ -82,8 +83,22 @@ button:hover {
    text-align: center;
    border: 1px solid #ffffff40;
    border-radius: 1em;
-   background-color: #00000090;
+   background-color: #000000bd;
    display: block;
+   margin: 0 auto;
+   opacity: 0;
+   position: relative;
+}
+
+#recuperarPass {
+   width: fit-content;
+   padding: 1em;
+   color: #fff;
+   text-align: center;
+   border: 1px solid #ffffff40;
+   border-radius: 1em;
+   background-color: #000000bd;
+   display: none;
    margin: 0 auto;
    opacity: 0;
    position: relative;
@@ -117,10 +132,25 @@ a {
    margin: 1em auto;
 }
 
-#alerta {
-   color: #fc3c3c;
-   font-size: 0.7em;
-   animation: none;
+#enviarPass {
+   margin: 1em auto 0 auto;
+}
+
+#feedbackDialog {
+   background-color: #e6e6e6;
+   border: none;
+   border-radius: 1em;
+   color: black;
+   box-shadow: 4px 4px 10px 4px black;
+}
+
+#respuestaDialog {
+   white-space: pre-line;
+   text-align:center;
+}
+
+#cerrarDialog {
+   margin: 0.5em auto;
 }
 
 @media (min-width: 1280px) {

@@ -3,33 +3,38 @@ import { selectorRegion } from "./shared/region.js";
 document.addEventListener("DOMContentLoaded", () => {
   selectorRegion();
 
-  //capturamos los elementos del DOM necesarios para el registro
-
-  const form = document.getElementById("formRegistro");
-  const error = document.getElementsByClassName("error");
   const feedbackDialog = document.getElementById("feedbackDialog");
   const respuestaDialog = document.getElementById("respuestaDialog");
   const cerrarDialog = document.getElementById("cerrarDialog");
-
+  
   //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
   
   function mostrarDialog(mensaje) {
     respuestaDialog.textContent = mensaje;
     feedbackDialog.showModal();
   }
-
+  
   cerrarDialog.addEventListener("click", () => {
     feedbackDialog.close();
   });
 
+  //capturamos los elementos del DOM necesarios para el registro
+
+  const form = document.getElementById("formRegistro");
+  const error = document.getElementsByClassName("error");
+
+  //definimos las regex y definimos una variable para controlar la validez de los formularios
+
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w]).{10,}$/;
+  
+  let formularioValido = true;
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    //definimos las regex y marcamos el formulario como válido a la espera de las validaciones
 
-    let formularioValido = true;
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w]).{10,}$/;
+    formularioValido = true;
 
     //limpiamos los mensajes de error
 
@@ -57,8 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
               formularioValido = false;
             }
             if (!passRegex.test(form.pass.value)) {
-              error[2].textContent =
-                "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial";
+              error[2].textContent = "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial";
               formularioValido = false;
             }
             if (!form.privacidad.checked) {
@@ -96,9 +100,67 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         })
         .catch(() => {
-          formularioValido = false;
           mostrarDialog("Error de red");
         });
     }
   });
+
+  const formPass = document.getElementById("formCambiarPass");
+  const titulo = document.getElementsByClassName("tituloPagina")[0];
+
+  //Verificamos si la url contiene parámetros para el cambio de contraseña, y si es así, ocultamos el formulario de registro y mostramos el de cambio de contraseña
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
+  const token = urlParams.get("token");
+
+  if (id && token) {
+    titulo.textContent = "Introduzca su nueva contraseña";
+    form.style.display = "none";
+    formPass.style.display = "block";
+  }
+
+  //Capturamos el submit del formulario de cambio de contraseña, validamos los campos y si está todo bien, llamamos al back para cambiar la contraseña
+
+  formPass.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    formularioValido = true;
+
+    if (!passRegex.test(formPass.nuevoPass.value)) {
+      error[4].textContent = "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial";
+      formularioValido = false;
+    }
+    if (formPass.nuevoPass.value != formPass.confirmarPass.value) {
+      error[5].textContent = "Las contraseñas no coinciden";
+      formularioValido = false;
+    }
+    
+    if (formularioValido) {
+      fetch("/api/cambiarPass", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+          token: token,
+          nuevoPass: formPass.nuevoPass.value,
+          confirmarPass: formPass.confirmarPass.value
+        })
+      })
+      .then(r => {
+        if (r.ok) {
+          mostrarDialog("Contraseña cambiada correctamente")
+          setTimeout(() => {
+            window.location.href = "/index.html";
+          }, 4000);
+        }
+        else {
+          mostrarDialog(r.message);
+        }
+      })
+      .catch(err => {
+        mostrarDialog("Error de red");
+      })
+    }
+  })
 });

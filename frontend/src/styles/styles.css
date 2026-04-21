@@ -5,7 +5,10 @@
   font-style: normal;
 }
 
+
 /* ESTILOS GENERALES */
+
+
 * {
   font-family: "Rubik", sans-serif;
   font-size: 16px;
@@ -149,7 +152,7 @@ a {
 }
 
 #cerrarDialog {
-  outline:none;
+  outline: none;
 }
 
 /* MENÚ NAV */
@@ -234,13 +237,12 @@ a {
     transform 0.5s ease;
 }
 
-
-
-
-/* Hasta aquí estilos generales */
-
-
-
+.error {
+  display: block;
+  color: red;
+  font-size: 0.7em;
+  text-align: center;
+}
 
 @keyframes tienesCorreo {
   0% {
@@ -250,10 +252,10 @@ a {
     transform: rotate(30deg) translateX(10px) translateY(-5px) scale(1.2);
   }
   30% {
-    transform:rotate(10deg) translateX(-5px) translateY(10px) scale(0.7);
+    transform: rotate(10deg) translateX(-5px) translateY(10px) scale(0.7);
   }
   45% {
-    transform:rotate(-30deg) translateX(10px) translateY(-5px) scale(1.3);
+    transform: rotate(-30deg) translateX(10px) translateY(-5px) scale(1.3);
   }
   60% {
     transform: scale(0.1) rotate(90deg);
@@ -278,15 +280,36 @@ a {
   transform: none;
 }
 
+
+
+
+/* Hasta aquí estilos generales */
+
+
+
+
 /* REGISTRO - PERFIL */
+
 
 .tituloPagina {
   margin-top: 3em;
 }
 
 #formRegistro {
-  max-width: 550px;
-  margin: 0.5em;
+  max-width: 700px;
+  margin: 0.5em auto;
+  padding: 0.8em;
+  border-radius: 0.5em;
+  border: 0.5px solid var(--blanco-translucido);
+  box-shadow: 5px 5px 10px var(--verde);
+  background-color: var(--casi-blanco);
+  backdrop-filter: blur(6px);
+}
+
+#formCambiarPass {
+  display: none;
+  max-width: 700px;
+  margin: 0.5em auto;
   padding: 0.8em;
   border-radius: 0.5em;
   border: 0.5px solid var(--blanco-translucido);
@@ -342,7 +365,9 @@ a {
   font-size: 1em;
 }
 
+
 /* CREAR QUEDADA*/
+
 
 .editarMapa {
   display: block;
@@ -406,7 +431,9 @@ a {
   text-align: center;
 }
 
+
 /* TABLON */
+
 
 #filtros {
   margin: 1em;
@@ -533,7 +560,9 @@ a {
   grid-column: span 2;
 }
 
+
 /* CORREO */
+
 
 .menuCorreo {
   background-color: var(--casi-blanco);
@@ -630,7 +659,7 @@ a {
 
 #cerrarRedactar {
   margin: 0;
-  position:absolute;
+  position: absolute;
   right: 0;
   top: 0;
   padding: 0.2em 0.5em;
@@ -641,7 +670,10 @@ a {
   height: 8em;
 }
 
+
 /* media query para TABLETS */
+
+
 @media (min-width: 600px) {
   * {
     font-size: 24px;
@@ -651,12 +683,18 @@ a {
     margin: 1em auto;
   }
 
+
   /* MENÚ NAV */
+
+
   .menu {
     top: 70px;
   }
 
+
   /* PERFIL */
+
+
   #formPerfil {
     display: grid;
     grid-template-columns: 1fr 3fr;
@@ -696,7 +734,9 @@ a {
     bottom: 50px;
   }
 
+
   /* TABLON */
+
 
   .organizador {
     gap: 10px;
@@ -707,7 +747,11 @@ a {
   }
 }
 
+
+
 /* media query para PC*/
+
+
 
 @media (min-width: 1200px) {
   /* MENÚ NAV */
@@ -730,7 +774,9 @@ a {
     display: none;
   }
 
+
   /* PERFIL */
+
 
   #formPerfil {
     display: grid;
@@ -762,7 +808,9 @@ a {
     grid-column: span 3;
   }
 
+
   /* CREAR QUEDADA */
+
 
   .editarMapa {
     display: grid;
@@ -792,7 +840,9 @@ a {
     margin-top: 0;
   }
 
+
   /* TABLON */
+
 
   #filtros {
     max-width: 1200px;
@@ -824,7 +874,7 @@ a {
   }
 
   .organizadorContainer {
-    display:block;
+    display: block;
   }
 
   #contenedorMapa {
@@ -839,7 +889,9 @@ a {
     justify-content: center;
   }
 
+
   /* CORREO */
+
 
   .correoContainer {
     display: grid;
@@ -858,7 +910,7 @@ a {
   }
   .contenedorBuzones {
     margin: 1em;
-    padding:0.5em;
+    padding: 0.5em;
     height: 68vh;
     overflow: scroll;
     box-shadow: inset 0 0 5px var(--verde-claro);

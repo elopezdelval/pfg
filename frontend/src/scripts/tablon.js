@@ -123,8 +123,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (event.target.classList.contains("verRuta")) {
       contenedorMapa.style.display = "block";
-
+      
       const indice = parseInt(event.target.dataset.indice);
+      guardarRuta.dataset.indice = indice;
 
       mapa.setView(quedadas[indice].ruta.coordenadas[0], 15);
       cargarMapa(mapa, quedadas[indice].actividad);
@@ -133,39 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: 6,
       }).addTo(mapa);
     }
-
-    //si se pulsa guardar ruta dentro del mapa, enviamos la petición al back para guardarla.
-
-    guardarRuta.addEventListener("click", () => {
-      const indice = parseInt(event.target.dataset.indice);
-
-      fetch("/api/auth/guardarRuta", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: quedadas[indice].idruta }),
-      })
-        .then((r) => {
-          if (!r.ok) {
-            throw new Error("Error al guardar la ruta");
-          } else {
-            return r.json();
-          }
-        })
-        .then(() => {
-          mostrarDialog("ruta guardada");
-        })
-        .catch(() => {
-          mostrarDialog("error guardando ruta");
-        });
-    });
-
-    //boton para cerrar el mapa
-
-    cerrarMapa.addEventListener("click", () => {
-      contenedorMapa.style.display = "none";
-    });
 
     //Si se pulsa el botón de apuntarse o desapuntarse, se envía la petición al back y se cambia el texto del botón y el estado de apuntado en la quedada
 
@@ -207,4 +175,37 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = `/correo.html?organizador=${organizador}`;
     }
   });
+
+//si se pulsa guardar ruta dentro del mapa, enviamos la petición al back para guardarla.
+
+    guardarRuta.addEventListener("click", () => {
+      const indice = parseInt(event.target.dataset.indice);
+
+      fetch("/api/auth/guardarRuta", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: quedadas[indice].idruta }),
+      })
+        .then((r) => {
+          if (!r.ok) {
+            throw new Error("Error al guardar la ruta");
+          } else {
+            return r.json();
+          }
+        })
+        .then(() => {
+          mostrarDialog("ruta guardada");
+        })
+        .catch(() => {
+          mostrarDialog("error guardando ruta");
+        });
+    });
+
+    //boton para cerrar el mapa
+
+    cerrarMapa.addEventListener("click", () => {
+      contenedorMapa.style.display = "none";
+    });
 });

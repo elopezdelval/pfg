@@ -12,9 +12,13 @@
 </head>
 
 <body>
+   <dialog id="feedbackDialog">
+        <p id="respuestaDialog">Esto es un mensaje de feedback</p>
+        <button id="cerrarDialog">Cerrar</button>
+   </dialog>
    <section class="presentacion">
       <h1>La Grupeta</h1>
-      <p>Lo importante es disfrutar el camino</p>
+      <h2>Lo importante es disfrutar el camino</h2>
       <div class="botones">
          <button type="button" id="entrar">Entrar</button>
          <button type="button" id="registrarse">Registrarse</button>
@@ -29,9 +33,13 @@
 
       <button type="submit" id="iniciarSesion">Iniciar sesión</button>
 
-      <p id="alerta"></p>
+      <a href="" id="cambioForm">He olvidado mi contraseña</a>
+   </form>
+   <form action="#" id="recuperarPass">
+      <label for="recuperarUsuario">Usuario</label>
+      <input type="text" id="recuperarUsuario" name="recuperarUsuario">
 
-      <a href="">He olvidado mi contraseña</a>
+      <button id="enviarPass">Nueva contraseña</button>
    </form>
 </body>
 

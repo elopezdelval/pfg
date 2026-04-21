@@ -35,7 +35,6 @@ export default function htmlMensaje(mensaje, i, bandeja) {
     eliminar.className = "eliminarMensaje";
     eliminar.dataset.bandeja = bandeja;
     eliminar.dataset.id = mensaje.id;
-    eliminar.dataset.indice = i;
     eliminar.textContent = "eliminar";
     botones.appendChild(eliminar);
   }

@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cerrarDialog = document.getElementById("cerrarDialog");
 
   //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
-  
+
   function mostrarDialog(mensaje) {
     respuestaDialog.textContent = mensaje;
     feedbackDialog.showModal();
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < quedadas.length; i++) {
         if (quedadas[i].apuntado) {
-          
           //si el usuario no tiene avatar cargamos el avatar por defecto
           if (quedadas[i].avatar_url === null) {
             quedadas[i].avatar_url = "/img/avatar.png";
@@ -96,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       contenedorMapa.style.display = "block";
 
       const indice = parseInt(event.target.dataset.indice);
+      guardarRuta.dataset.indice = indice;
 
       mapa.setView(quedadas[indice].ruta.coordenadas[0], 15);
       cargarMapa(mapa, quedadas[indice].actividad);
@@ -104,41 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
         weight: 6,
       }).addTo(mapa);
     }
-
-    //Si se pulsa guardar ruta, se envía la petición al back, se guarda la ruta en el array de rutas y se añade al tablon de rutas
-
-    guardarRuta.addEventListener("click", () => {
-      const indice = parseInt(event.target.dataset.indice);
-
-      fetch("/api/auth/guardarRuta", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: quedadas[indice].idruta }),
-      })
-        .then((r) => {
-          if (!r.ok) {
-            throw new Error("Error al guardar la ruta");
-          } else {
-            return r.json();
-          }
-        })
-        .then((r) => {
-          rutas.push(r);
-          misRutas.appendChild(htmlRuta(rutas[rutas.length - 1], rutas.length - 1));
-          mostrarDialog("Ruta guardada");
-        })
-        .catch(() => {
-          mostrarDialog("error guardando ruta");
-        });
-    });
-
-    //boton de cerrar el mapa
-
-    cerrarMapa.addEventListener("click", () => {
-      contenedorMapa.style.display = "none";
-    });
 
     //Si se pulsa el botón de apuntarse o desapuntarse, se envía la petición al back y se borra la quedada del tablón
 
@@ -224,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
       contenedorMapa.style.display = "none";
     });
 
-    //Si se pulsa el botón de descartar, se envía la petición al back para eliminar la ruta y se borra la ruta del tablón
+    //Si se pulsa el botón de descartar, se envía la petición al back para eliminar la ruta y se borra la ruta del tablón. No se borra del array para respetar la integridad referencial respecto a los índices de los dataset
 
     if (event.target.classList.contains("descartar")) {
       const indice = parseInt(event.target.dataset.indice);
@@ -241,7 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!r.ok) {
             throw new Error("Error al eliminar la ruta");
           } else {
-            rutas.splice(indice, 1);
             event.target.parentElement.remove();
           }
         })
@@ -256,5 +220,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.location.href = `/crearQuedada.html?idRuta=${idRuta}`;
     }
+  });
+
+  //Si se pulsa guardar ruta, se envía la petición al back, se guarda la ruta en el array de rutas y se añade al tablon de rutas
+
+  guardarRuta.addEventListener("click", () => {
+    const indice = parseInt(event.target.dataset.indice);
+
+    fetch("/api/auth/guardarRuta", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: quedadas[indice].idruta }),
+    })
+      .then((r) => {
+        if (!r.ok) {
+          throw new Error("Error al guardar la ruta");
+        } else {
+          return r.json();
+        }
+      })
+      .then((r) => {
+        rutas.push(r);
+        misRutas.appendChild(
+          htmlRuta(rutas[rutas.length - 1], rutas.length - 1),
+        );
+        mostrarDialog("Ruta guardada");
+      })
+      .catch(() => {
+        mostrarDialog("error guardando ruta");
+      });
+  });
+
+  //boton de cerrar el mapa
+
+  cerrarMapa.addEventListener("click", () => {
+    contenedorMapa.style.display = "none";
   });
 });

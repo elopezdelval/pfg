@@ -191,13 +191,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         verMensaje(mensaje);
 
-        //Cuando se abre un mensaje se marca como leido en la bbdd
+        //Cuando se abre un mensaje se marca como leido en la bbdd y le quitamos la class noLeido si la tiene
 
         fetch("/api/auth/marcarLeido", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: mensaje.id }),
-        }).catch((err) => {
+        })
+        .then(r => {
+          const mensajeLeido = event.target.closest("article");
+          if (mensajeLeido.classList.contains("noLeido")) {
+            mensajeLeido.classList.remove("noLeido");
+          }
+        })
+        .catch((err) => {
           console.log(err);
         });
       }
