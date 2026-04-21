@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import multer from "multer";
 import { createClient } from "@supabase/supabase-js";
+import { createError } from "../errors/AppError.js";
 
 export default function endpointsUsuarios(app, db) {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -8,41 +9,33 @@ export default function endpointsUsuarios(app, db) {
 
   //endpoint para confirmar si el nombre de usuario está disponible
 
-  app.get("/api/buscarNombre", (req, res) => {
+  app.get("/api/buscarNombre", (req, res, next) => {
     const usuario = req.query.usuario;
 
     db.query("SELECT id FROM usuarios WHERE usuario = $1", [usuario])
       .then((usuario) => {
         if (usuario.rows.length === 0) {
-          res.status(200).json({ mensaje: "usuario disponible" });
+          res.status(200).json({ message: "usuario disponible" });
         } else {
-          res.status(400).json({ mensaje: "usuario no disponible" });
+          res.status(400).json({ message: "usuario no disponible" });
         }
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({ error: "error obteniendo los usuarios" });
-      });
+      .catch(next);
   });
 
   //endpoint para obtener los datos del usuario activo para el perfil
 
-  app.get("/api/auth/datosUsuario", (req, res) => {
+  app.get("/api/auth/datosUsuario", (req, res, next) => {
     db.query("SELECT * FROM  obtener_datos_usuario($1)", [req.usuario.id])
       .then((r) => {
         res.json(r.rows[0]);
       })
-      .catch((err) => {
-        console.error(err);
-        res
-          .status(500)
-          .json({ error: "Error obteniendo los datos de usuario" });
-      });
+      .catch(next);
   });
 
   //endpoint de registro de usuarios
 
-  app.post("/api/registrarUsuario", (req, res) => {
+  app.post("/api/registrarUsuario", (req, res, next) => {
     const usuario = req.body;
 
     //verificamos que no haya campos no nulos en la bbdd vacíos
@@ -53,18 +46,15 @@ export default function endpointsUsuarios(app, db) {
       !usuario.pass ||
       !usuario.nombre
     ) {
-      return res.status(400).json({ error: "faltan campos obligatorios" });
+      return next(createError(400, "MISSING_REQUIRED_FIELDS", "Faltan campos obligatorios"));
     }
 
     if (!emailRegex.test(usuario.email.trim())) {
-      return res.status(400).json({ error: "formato de email incorrecto" });
+      return next(createError(400, "VALIDATION_ERROR", "Formato de email incorrecto"));
     }
 
     if (!passRegex.test(usuario.pass)) {
-      return res.status(400).json({
-        error:
-          "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial",
-      });
+      return next(createError(400, "VALIDATION_ERROR", "La contraseña debe tener al menos 10 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial"));
     }
 
     //encriptamos la contraseña e insertamos todo en la bbdd
@@ -83,35 +73,29 @@ export default function endpointsUsuarios(app, db) {
       ],
     )
       .then((correcto) =>
-        res.status(200).json({ mensaje: "usuario registrado" }),
+        res.status(200).json({ message: "usuario registrado" }),
       )
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({ error: "error al insertar el usuario" });
-      });
+      .catch(next);
   });
 
   //endpoint para modificar los datos de usuario
 
-  app.put("/api/auth/modificarPerfil", (req, res) => {
+  app.put("/api/auth/modificarPerfil", (req, res, next) => {
     const datos = req.body;
 
     if (!datos.usuario || !datos.email || !datos.nombre) {
-      return res.status(400).json({ error: "faltan campos obligatorios" });
+      return next(createError(400, "MISSING_REQUIRED_FIELDS", "Faltan campos obligatorios"));
     }
 
     if (!emailRegex.test(datos.email.trim())) {
-      return res.status(400).json({ error: "formato de email incorrecto" });
+      return next(createError(400, "VALIDATION_ERROR", "Formato de email incorrecto"));
     }
 
     //Verificamos si el usuario está intentando cambiar la contraseña, y si es así, verificamos la contraseña anterior, si pasa encriptamos la nueva y enviamos los datos a la bbdd
 
     if (datos.newPass != "") {
       if (!passRegex.test(datos.newPass)) {
-        return res.status(400).json({
-          error:
-            "La contraseña debe tener al menos 10 caracteres una mayúscula una minúscula un número y un caracter especial",
-        });
+        return next(createError(400, "VALIDATION_ERROR", "La contraseña debe tener al menos 10 caracteres, una mayúscula, una minúscula, un dígito y un caracter especial"));
       }
 
       db.query("SELECT pass FROM usuarios WHERE id = $1", [req.usuario.id,])
@@ -119,7 +103,7 @@ export default function endpointsUsuarios(app, db) {
         return bcrypt.compare(datos.pass, r.rows[0].pass)
           .then((coincide) => {
             if (!coincide) {
-              return res.status(401).json({ error: "Credenciales incorrectas" });
+              return next(createError(401, "INVALID_CREDENTIALS", "Credenciales incorrectas"));
             }
             //Si pasa la verificación, hasheamos la cntraseña y hacemos la query
             const hashedPass = bcrypt.hashSync(datos.newPass, 8);
@@ -136,14 +120,12 @@ export default function endpointsUsuarios(app, db) {
               ],
             )
               .then(() => {
-                res.status(200).json({ mensaje: "perfil actualizado" });
+                res.status(200).json({ message: "perfil actualizado" });
               })
-              .catch((err) => {
-                console.log(err);
-                res.status(500).json({ error: "error actualizando el perfil" });
-              });
+              .catch(next);
           });
-      });
+      })
+      .catch(next);
     } else {
 
       //Si no se está cambiando la contraseña enviamos el resto de los datos a la bbdd
@@ -159,12 +141,9 @@ export default function endpointsUsuarios(app, db) {
         ],
       )
         .then(() => {
-          res.status(200).json({ mensaje: "perfil actualizado" });
+          res.status(200).json({ message: "perfil actualizado" });
         })
-        .catch((err) => {
-          console.log(err);
-          res.status(500).json({ error: "error actualizando el perfil" });
-        });
+        .catch(next);
     }
   });
 
@@ -182,14 +161,14 @@ export default function endpointsUsuarios(app, db) {
     process.env.SUPABASE_SERVICE_ROLE,
   );
 
-  app.put("/api/auth/cambiarAvatar", upload.single("avatar"), (req, res) => {
+  app.put("/api/auth/cambiarAvatar", upload.single("avatar"), (req, res, next) => {
     const imagenAvatar = req.file;
     const usuario = req.usuario;
 
     //verificamos que lo que llega es una imagen
 
     if (!imagenAvatar || !imagenAvatar.mimetype.startsWith("image/")) {
-      return res.status(400).json({ error: "imagen no válida" });
+      return next(createError(400, "INVALID_AVATAR_TYPE", "La imagen subida no es valida"));
     }
 
     //guardamos la imagen en el storage
@@ -212,12 +191,9 @@ export default function endpointsUsuarios(app, db) {
             usuario.id,
           ])
           .then((r) => {
-            res.status(200).json({ mensaje: "avatar actualizado" });
+            res.status(200).json({ message: "avatar actualizado" });
           });
       })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json({ error: "error al guardar la imagen" });
-      });
+      .catch(next);
   });
 }

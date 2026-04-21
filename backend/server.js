@@ -11,6 +11,8 @@ import endpointsUsuarios from "./endpoints/usuarios.js";
 import endpointsComunes from "./endpoints/comunes.js";
 import endpointsQuedadas from "./endpoints/quedadas.js";
 import endpointsMensajeria from "./endpoints/mensajeria.js";
+import recuperarPass from "./auth/recuperarPass.js";
+import errores from "./errors/errores.js";
 
 const app = express();
 const puerto = process.env.PORT || 3000;
@@ -21,10 +23,12 @@ app.use(cookieParser());
 
 authMiddleware(app);
 login(app, db);
+recuperarPass(app, db);
 endpointsUsuarios(app, db);
 endpointsComunes(app, db);
 endpointsQuedadas(app, db);
 endpointsMensajeria(app, db);
+errores(app);
 
 //Servimos el build generado en el front y cargamos index.html como página de inicio.
 

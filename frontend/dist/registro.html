@@ -7,10 +7,10 @@
     <title>La Grupeta | Registro</title>
     <link rel="icon" type="image/png" href="/img/Logo.png">
 
-  <script type="module" crossorigin src="/assets/registro-DJ2WyVi6.js"></script>
+  <script type="module" crossorigin src="/assets/registro-DMl4qhqI.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/modulepreload-polyfill-B5Qt9EMX.js">
   <link rel="modulepreload" crossorigin href="/assets/region-MV78zg_W.js">
-  <link rel="stylesheet" crossorigin href="/assets/styles-DJR2a2zF.css">
+  <link rel="stylesheet" crossorigin href="/assets/styles-CtkVPTPV.css">
 </head>
 
 <body>
@@ -29,7 +29,7 @@
             <li><a href="/index.html" class="menuLink">Inicio</a></li>
         </ul>
     </nav>
-    <h1 class="tituloPagina">Únete a nuestra comunidad</h1>
+    <h1 class="tituloPagina" id="titulo">Únete a nuestra comunidad</h1>
     <!-- Formulario de registro -->
     <form action="#" id="formRegistro" novalidate>
         <label for="nombre">Nombre completo*</label>
@@ -72,6 +72,17 @@
         <span class="error"></span>
 
         <button id="registro" type="submit">Enviar</button>
+    </form>
+    <form action="#" id="formCambiarPass">
+        <label for="nuevoPass">Nueva contraseña</label>
+        <input type="text" name="nuevoPass" id="nuevoPass">
+        <span class="error"></span>
+
+        <label for="confirmarPass">Confirmar contraseña</label>
+        <input type="text" name="confirmarPass" id="confirmarPass">
+        <span class="error"></span>
+
+        <button type="submit" id="cambiarPass">Enviar</button>
     </form>
     <footer>
         <span class="textoFooter">Creada por Enrique López del Val - Contacto: <a href="">elopezdelval@gmail.com</a></span>
