@@ -77,7 +77,7 @@ export default function endpointsQuedadas(app, db) {
             .catch(next);
     });
 
-    //endpoint para guardar / eliminar rutas
+    //endpoint para eliminar rutas
 
     app.post('/api/auth/eliminarRuta', (req, res, next) => {
         const usuario = req.usuario.id;

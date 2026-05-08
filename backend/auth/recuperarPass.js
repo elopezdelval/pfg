@@ -34,13 +34,13 @@ export default function recuperarPass(app, db) {
           .then((result) => {
             //Aquí generamos el cuerpo del correo de recuperación con el id del registro y el token
 
-            const cuerpo = `<p>Estimado usuario<br>Le remitimos un enlace para que proceda a la recuperación de la contraseña de su cuenta en nuestra página La Grupeta. Haga click en el enlace para establecer una nueva contraseña.<br>http://localhost:5173/registro.html?id=${result.rows[0].id}&token=${token}<br>Por favor realice el cambio de contraseña cuanto antes, la validez del enlace facilitado expira en 15min</p>`;
+            const cuerpo = `<p>Hola ${usuario}<br>Te mandamos un enlace para que puedas restablecer tu contraseña de acceso a La Grupeta. Haz click en el enlace y crea una nueva contraseña. Recuerda que la contraseña debe tener al menos una mayúscula una minúscula un número, un caracter especial y al menos 10 caracteres.<br>https://pfg-pvjz.onrender.com/registro.html?id=${result.rows[0].id}&token=${token}<br>Por favor realiza el cambio de contraseña cuanto antes, la validez del enlace que te enviamos expira en 15min</p>`;
 
             return enviarEmail(datos.email,"Recuperación de contraseña",cuerpo);
           });
       })
       .then((info) => {
-        //Si enviarEmail devuelve accepted significa que el envío ha ido bien, por lo que devolvemos 200 al front con el mensaje
+        //Si enviarEmail devuelve accepted significa que el envío ha ido bien, por lo que devolvemos 200 al front con el mensaje, si no, pasamos error
 
         if (info.accepted.length === 0) {
           return next(createError(500,"INTERNAL_SERVER_ERROR","No se ha podido enviar el email"));

@@ -32,6 +32,7 @@ export default function endpointsComunes(app, db) {
         const apikey = process.env.GRAPHHOPPER;
 
         //sacamos la informaciónn del body de la petición y construimos la url con la que vamos a hacer la consulta a GH
+        
         const entrada = req.body;
         const url = `https://graphhopper.com/api/1/route?point=${entrada.inicio.lat},${entrada.inicio.lng}&point=${entrada.fin.lat},${entrada.fin.lng}&profile=${entrada.perfil}&calc_points=true&points_encoded=false&instructions=false&optimize=false&key=${apikey}`;
 

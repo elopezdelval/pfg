@@ -34,12 +34,13 @@ export default function login(app, db) {
             const token = jwt.sign(
               { id: respuesta.rows[0].id, nombre: credenciales.usuario },
               process.env.SECRETO_JWT,
-              { expiresIn: "7d" },
+              { expiresIn: "1d" },
             );
 
             res.cookie("token", token, {
               httpOnly: true,
-              sameSite: "lax",
+              sameSite: "strict",
+              secure: "true"
             });
 
             console.log(`Login exitoso: ${credenciales.usuario}`);

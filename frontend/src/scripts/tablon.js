@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (event.target.classList.contains("verRuta")) {
       contenedorMapa.style.display = "block";
+      mapa.invalidateSize();
       
       const indice = parseInt(event.target.dataset.indice);
       guardarRuta.dataset.indice = indice;

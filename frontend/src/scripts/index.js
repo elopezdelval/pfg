@@ -73,7 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const recuperarPass = document.getElementById("recuperarPass");
   const enviarPass = document.getElementById("enviarPass");
 
-  enviarPass.addEventListener("click", () => {
+  enviarPass.addEventListener("click", (event) => {
+    event.preventDefault();
     fetch("/api/recuperarPass", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

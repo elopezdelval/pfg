@@ -38,7 +38,7 @@ export default function endpointsUsuarios(app, db) {
   app.post("/api/registrarUsuario", (req, res, next) => {
     const usuario = req.body;
 
-    //verificamos que no haya campos no nulos en la bbdd vacíos
+    //verificamos que no haya campos que sean no nulos en la bbdd vacíos y pasamos las regex de email y contraseña
 
     if (
       !usuario.usuario ||
@@ -82,6 +82,8 @@ export default function endpointsUsuarios(app, db) {
 
   app.put("/api/auth/modificarPerfil", (req, res, next) => {
     const datos = req.body;
+
+    //En el formulario de modificación de datos, se precargan todos los datos del usuario disponibles por lo que a la hora de modificar he decidido que sean obligatorios
 
     if (!datos.usuario || !datos.email || !datos.nombre) {
       return next(createError(400, "MISSING_REQUIRED_FIELDS", "Faltan campos obligatorios"));
@@ -129,6 +131,7 @@ export default function endpointsUsuarios(app, db) {
     } else {
 
       //Si no se está cambiando la contraseña enviamos el resto de los datos a la bbdd
+      
       db.query(
         "UPDATE usuarios SET usuario = $1, nombre = $2, email = $3, fecha_nacimiento = $4, region_id = $5 WHERE id = $6",
         [
