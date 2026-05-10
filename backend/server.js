@@ -16,6 +16,7 @@ import errores from "./errors/errores.js";
 
 const app = express();
 const puerto = process.env.PORT || 3000;
+const esProduccion = (process.env.NODE_ENV === "production");
 app.use(express.json());
 app.use(cookieParser());
 
@@ -30,17 +31,19 @@ endpointsQuedadas(app, db);
 endpointsMensajeria(app, db);
 errores(app);
 
-//Servimos el build generado en el front y cargamos index.html como página de inicio.
+//En producción servimos también el frontend compilado desde Express.
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rutaDist = path.join(__dirname, "../frontend/dist");
+if (esProduccion) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const rutaDist = path.join(__dirname, "../frontend/dist");
 
-app.use(express.static(rutaDist));
+  app.use(express.static(rutaDist));
 
-app.get("/", (req, res) => {
-  res.sendFile(path.join(rutaDist, "index.html"));
-});
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(rutaDist, "index.html"));
+  });
+}
 
 app.listen(puerto, () => {
   console.log(`Servidor escuchando en http://localhost:${puerto}`);

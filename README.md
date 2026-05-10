@@ -1,106 +1,210 @@
-# Descripción y objetivo del proyecto
+# Proyecto final DAW — Plataforma de salidas deportivas
 
-Proyecto académico para la asignatura de proyecto final de DAW. El objetivo del proyecto es la creación de un sitio web tipo red social de salidas deportivas (ciclismo, running, senderismo). El eje central es la origanización de quedadas lúdicas a las que cualquiera puede apuntarse.
-- - -
-# Estructura
-## Frontend (Vite js multipágina)
+Proyecto Final de DAW.
 
-- Se utiliza vite como live server y bundler
-- Múltiples entradas definidas en `vite.config.js`
-- Cada página tiene un HTML con su JS
-- Código compartido en `shared/`
-- Dos archivos CSS uno para la página de presentación/login y otro para el resto
-- El build genera `frontend/dist`, que se servirá desde el back directamente por Express en producción
+Aplicación web para organización de actividades deportivas (ciclismo, running y senderismo) con creación de rutas interactivas y gestión de quedadas.
 
-## Backend — (Node con express)
+Incluye autenticación JWT, persistencia de rutas geográficas, integración con APIs externas y despliegue dockerizado.
 
-- Se sirve `frontend/dist` con `express.static` en producción, en desarrollo se utiliza como servidor proxy
-- Conexión a bbdd externalizada en supabase.com
-- Se organiza el backend en bbdd, autenticación, errores y endpoints de lógica de negocio
-- Autenticación JWT
-- Validación de acceso y control de sesión a través de cookies
+---
+
+## Stack
+
+* Frontend: Vite, JavaScript, Leaflet
+* Backend: Node.js, Express
+* Base de datos: PostgreSQL (Supabase)
+* Autenticación: JWT + cookies httpOnly
+* Despliegue: Docker + Render
+* API externa: Graphhopper
+
+---
+
+## Funcionalidades
+
+* Registro e inicio de sesión
+* Recuperación de contraseña
+* Perfil de usuario con edición de datos personales
+* Cambio de contraseña desde el perfil
+* Subida y actualización de avatar
+* Creación y reutilización de rutas deportivas
+* Guardado y eliminación de rutas en la actividad personal
+* Creación de quedadas deportivas
+* Inscripción y baja en quedadas
+* Sistema de mensajería interna entre usuarios
+* Bandejas de mensajes recibidos, enviados y eliminados
+* Marcado de mensajes como leídos y borrado lógico
+* Renderizado de rutas en mapas interactivos
+* Control de acceso mediante JWT y cookies seguras
+
+---
+
+## Arquitectura
+
+La aplicación sigue una arquitectura cliente-servidor dividida en frontend, backend y base de datos. El frontend está desarrollado con Vite y JavaScript vanilla en formato multipágina, el backend con Node.js y Express expone la API REST y gestiona la autenticación mediante JWT en cookies httpOnly, y la persistencia se apoya en PostgreSQL en Supabase. Además, Supabase Storage se utiliza para los avatares y Graphhopper para el cálculo de rutas.
+
+* `Frontend`: interfaz multipágina y renderizado de mapas con Leaflet
+* `Backend`: lógica de negocio, autenticación y endpoints REST
+* `Base de datos`: persistencia relacional y funciones SQL auxiliares
+* `Servicios externos`: Graphhopper para rutas y Supabase Storage para avatares
+
+---
+
+## Frontend
+
+Frontend desarrollado con Vite en arquitectura multipágina.
+
+* Múltiples entradas definidas en vite.config.js
+* Cada página dispone de su propio HTML y JS
+* Código compartido organizado en shared/
+
+Se utiliza Leaflet para renderizar mapas y mostrar rutas deportivas sobre distintas capas según el deporte seleccionado.
+
+---
+
+## Backend
+
+Backend desarrollado con Node.js y Express.
+
+* API REST para lógica de negocio
+* Uso de proxy en entorno de desarrollo
+* Organización separada de autenticación, base de datos y endpoints
+
+#### Autenticación
+
+* JWT almacenado en cookies httpOnly
+* Validación de acceso y control de sesión
+* Recuperación de contraseña mediante envío de correo
+
+---
 
 ## Base de datos
 
-- PostgreSQL.
-- Tablas principales rutas, usuarios, quedadas y mensajes.
-- Tablas de relación usuarios-quedadas, usuarios-rutas
-- Tablas secundarias regiones, paises (para cargar en selector de provincias/regiones)
+La base de datos PostgreSQL está desplegada en Supabase.
 
-# Tecnologías
+La documentación detallada de la estructura, tablas, funciones SQL y almacenamiento de avatares se encuentra en [DATABASE.md](./DATABASE.md).
 
-## Frontend
-- **Vite** — Build tool y servidor de desarrollo
-- **Leaflet** — Librería open source para mapas interactivos
-- **Vanilla JS** — Sin framework, módulos ES
+---
 
-## Backend
-- **Node.js** — Entorno de ejecución
-- **Express** — Framework web
-- **pg** — Cliente PostgreSQL
-- **jsonwebtoken** — Autenticación JWT
-- **bcrypt** — Hash de contraseñas
-- **cookie-parser** — Gestión de cookies
-- **multer** — Subida de archivos
-- **dotenv** — Variables de entorno
-- **Leaflet** — Mapas (servido desde backend)
-- **nodemon** — Recarga automática en desarrollo
+## Integración de mapas y rutas
 
-## Servicios externos
-- **Supabase** — PostgreSQL + almacenamiento (plan gratuito)
-- **GraphHopper** — API para cálculo y optimización de rutas (500 peticiones/día gratis)
+### Leaflet
+
+Se utiliza Leaflet para:
+
+* renderizar mapas
+* mostrar rutas
+* gestionar capas según el tipo de actividad
+
+### Graphhopper
+
+Se utiliza Graphhopper para el cálculo de rutas.
+
+El servicio permite generar recorridos optimizados según el perfil seleccionado:
+
+* a pie
+* bicicleta
+* coche
+
+---
 
 ## Despliegue
-- **Docker** — Contenedores
-- **Render** — Hosting (plan gratuito con cold start ~40s)
 
-# Lógica de mapas
+La aplicación se encuentra dockerizada y desplegada en Render utilizando el plan gratuito.
 
-- Se usa leaflet para renderizar los mapas y pintar las rutas. Se utilizan capas diferentes en función del deporte seleccionado que resltan en el mapa caminos/carriles bici/nada. Es una librería de código abierto.
-- Se usa el servicio externo graphhopper para el cálculo y optimización de las rutas. La ruta se calcula en función del perfil seleccionado (en coche, a pie o en bicicleta en el plan gratuito). Tiene un plan gratuito de 500 peticiones diarias, suficiente para desarrollo y testing. Una vez guardada una ruta no es necesario realizar más consultas a graphhopper dado que se almacenan las coordenadas de los puntos necesarios para pintar la ruta desde la base de datos.
+Limitaciones actuales del despliegue:
 
-# Instrucciones de uso
+* cold starts de aproximadamente 40 segundos tras periodos de inactividad de más de 15min
+* restricción al uso de SMTP en el plan gratuito de render para envío de correos
+* dependencia de API externa para la creación de rutas con límite de peticiones en plan gratuito de graphhopper
 
-## Requisitos previos
+La funcionalidad de recuperación de contraseña está implementada y funciona correctamente en entorno local utilizando variables de entorno SMTP.
 
-- Node.js (v18+)
-- Docker y Docker Compose
+---
 
-## Variables de entorno
+## Decisiones técnicas
 
-Crea un archivo `.env` en la raíz del proyecto con la siguiente estructura:
+#### Persistencia de rutas
 
-```env
-# Puerto del servidor
-PORT=3000
+Las coordenadas generadas por Graphhopper se almacenan en base de datos para reducir llamadas a la API y limitar la dependencia de los límites del plan gratuito.
 
-# Secret para JWT (genera una cadena aleatoria segura)
-SECRETO_JWT=tu_secret_aqui_cuanto_mas_largo_mejor
+#### Arquitectura multipágina
 
-# Supabase (obtén tus credenciales en supabase.com)
-SUPABASE_URL=https://tu-proyecto.supabase.co
-SUPABASE_KEY=tu_api_key_anónyma
+Se optó por una arquitectura con JavaScript vanilla para centrar el proyecto en la lógica de la aplicación y evitar complejidad adicional en el desarrollo del frontend añadiendo un framework. Como evolución natural, una versión futura podría migrar el cliente a React para mejorar la reutilización de componentes y estados.
+
+#### Autenticación
+
+La autenticación se resolvió con JWT en cookies httpOnly para gestionar la sesión de forma sencilla y evitar exponer el token directamente al cliente.
+
+#### Lógica SQL
+
+Parte de la lógica de consulta se trasladó a funciones SQL para mantener los endpoints del backend más limpios.
+
+---
+
+## Configuración y ejecución
+
+### Requisitos previos
+
+Antes de ejecutar el proyecto es necesario disponer de:
+
+* Node.js 22 o compatible
+* npm
+* Un proyecto de Supabase con base de datos PostgreSQL accesible
+* Un bucket público `Avatares` en Supabase Storage
+* Una API key de Graphhopper
+* Una cuenta SMTP compatible con Nodemailer para la recuperación de contraseña
+
+### Variables de entorno
+
+El backend carga sus variables desde `backend/.env`.
+
+Existe una plantilla en `backend/.env.example` con valores de ejemplo para configurar el entorno local.
+
+Variables necesarias:
+
+* `NODE_ENV`: modo de ejecución del backend (`development` o `production`)
+* `GRAPHHOPPER`: API key usada para calcular rutas
+* `PORT`: puerto en el que escucha Express
+* `DB_URL`: cadena de conexión a PostgreSQL
+* `SECRETO_JWT`: secreto para firmar y verificar los tokens JWT
+* `SUPABASE_URL`: URL del proyecto de Supabase
+* `SUPABASE_SERVICE_ROLE`: clave de servicio usada para subir avatares a Storage
+* `SMTP_USER`: cuenta de correo usada para enviar emails
+* `SMTP_PASS`: contraseña o app password de la cuenta SMTP
+
+### Ejecución en desarrollo
+
+Instalar dependencias en:
+
+* la raíz del proyecto
+* `frontend/`
+* `backend/`
+
+Ejecutar desde la raíz:
+```bash
+npm run dev
 ```
 
-### Modo producción
-Para levantar el proyecto localmente, primero se debe hacer el build del front ejecutando
+Esto lanza:
+
+* Vite en `http://localhost:5173`
+* Express en `http://localhost:3000`
+
+En desarrollo, el backend se ejecuta con `NODE_ENV=development` y actúa solo como API. Vite redirige las peticiones `/api` al backend mediante proxy.
+
+### Ejecución en producción
+
+Generar antes el build del frontend:
 ```bash
 cd frontend
 npm run build
 ```
-Luego simplemente se ejecuta docker-compose desde la raíz
+
+Levantar contenedores desde la raíz:
 ```bash
 docker-compose up
 ```
-la aplicación quedará corriendo en http://localhost:3000/
-### Modo desarrollo
 
-Para ejecutar en modo desarrollo comenta las lineas 33-41 de server.js y ejecuta desde la raiz
-```
-npm run dev
-```
-La aplicación quedará corriendo en http://localhost:5173/
-### Despliegue
-Para simular un entorno de producción real, se ha empaquetado la aplicación con docker y se ha desplegado en el servicio de hosting render.com (dado que es un proyecto académico se ha optado por la opción gratuita que penaliza con un cold start de unos 40s cuando la página que da inactiva más de 15min).
+La aplicación quedará disponible en `http://localhost:3000`.
 
-Se puede probar el proyecto en https://pfg-pvjz.onrender.com
+En producción, el contenedor arranca con `NODE_ENV=production` y Express sirve el contenido generado en `frontend/dist`.
