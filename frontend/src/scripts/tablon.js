@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let apuntarse = "";
 
-  fetch("/api/auth/obtenerQuedadas")
+  fetch("/api/auth/obtenerQuedadasTablon")
     .then((r) => {
       if (!r.ok) {
         throw new Error("No se han podido obtener las quedadas");
@@ -174,6 +174,30 @@ document.addEventListener("DOMContentLoaded", () => {
       const organizador = quedadas[indice].organizador;
 
       window.location.href = `/correo.html?organizador=${organizador}`;
+    }
+
+    //si se pulsa el botón de ver apuntados llamamos al back y sacamos los apuntados en el dialog
+
+    if (event.target.classList.contains("apuntados")) {
+      const indice = parseInt(event.target.dataset.indice);
+      const idQuedada = quedadas[indice].id;
+
+      fetch(`/api/participantesQuedada?idQuedada=${idQuedada}`)
+      .then((r) => {
+          if (!r.ok) {
+            throw new Error("Error obteniendo a los apuntados");
+          }
+          return r.json();
+      })
+      .then(respuesta => {
+        const participantes = respuesta.map((participantes) => participantes.usuario);
+        respuestaDialog.textContent = "";
+
+        for (const participante of participantes) {
+          respuestaDialog.insertAdjacentHTML("beforeend", `<p>- ${participante}</p>`);
+        }
+        feedbackDialog.showModal();
+      })
     }
   });
 

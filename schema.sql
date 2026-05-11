@@ -195,6 +195,20 @@ $$;
 
 ALTER FUNCTION "public"."obtener_rutas"("p_usuario_id" integer) OWNER TO "postgres";
 
+
+CREATE OR REPLACE FUNCTION "public"."usuarios_apuntados"("p_quedada_id" integer) RETURNS TABLE("usuario" "text")
+    LANGUAGE "sql"
+    AS $$
+  SELECT 
+    u.usuario
+  FROM usuarios_quedadas uq
+  JOIN usuarios u ON u.id = uq.usuario_id
+  WHERE uq.quedada_id = p_quedada_id;
+$$;
+
+
+ALTER FUNCTION "public"."usuarios_apuntados"("p_quedada_id" integer) OWNER TO "postgres";
+
 SET default_tablespace = '';
 
 SET default_table_access_method = "heap";
@@ -734,6 +748,12 @@ GRANT ALL ON FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) TO "se
 GRANT ALL ON FUNCTION "public"."obtener_rutas"("p_usuario_id" integer) TO "anon";
 GRANT ALL ON FUNCTION "public"."obtener_rutas"("p_usuario_id" integer) TO "authenticated";
 GRANT ALL ON FUNCTION "public"."obtener_rutas"("p_usuario_id" integer) TO "service_role";
+
+
+
+GRANT ALL ON FUNCTION "public"."usuarios_apuntados"("p_quedada_id" integer) TO "anon";
+GRANT ALL ON FUNCTION "public"."usuarios_apuntados"("p_quedada_id" integer) TO "authenticated";
+GRANT ALL ON FUNCTION "public"."usuarios_apuntados"("p_quedada_id" integer) TO "service_role";
 
 
 

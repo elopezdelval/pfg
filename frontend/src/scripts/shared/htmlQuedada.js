@@ -1,9 +1,9 @@
-export default function htmlQuedada(q, i, apuntarse) {
+export default function htmlQuedada(q, i, apuntarse, antigua) {
 
 //Esta función genera un html reutilizable para renderizar las quedadas, se van creando los elementos y metiendoles el contenido como texto con textContent para evitar posibles xss
 
   const article = document.createElement("article");
-  article.className = "quedada";
+  article.classList.add("quedada", antigua);
 
   const encabezado = document.createElement("span");
   encabezado.className = "tablon-encabezado";
@@ -32,7 +32,7 @@ export default function htmlQuedada(q, i, apuntarse) {
 
   const enviarMensaje = document.createElement("button");
   enviarMensaje.textContent = "enviar mensaje";
-  enviarMensaje.className = "enviarMensaje";
+  enviarMensaje.classList.add("enviarMensaje", antigua);
   enviarMensaje.dataset.indice = i;
 
   organizador.append(textoOrganizador, avatar, nombreOrganizador);
@@ -60,11 +60,16 @@ export default function htmlQuedada(q, i, apuntarse) {
   verRuta.textContent = "la ruta";
 
   const unirse = document.createElement("button");
-  unirse.className = "unirse";
+  unirse.classList.add("unirse", antigua);
   unirse.dataset.indice = i;
   unirse.textContent = apuntarse;
 
-  botones.append(verRuta, unirse);
+  const apuntados = document.createElement("button");
+  apuntados.classList.add("apuntados", antigua);
+  apuntados.dataset.indice = i;
+  apuntados.textContent = "ver participantes";
+
+  botones.append(apuntados, verRuta, unirse);
 
   article.append(encabezado, fecha, organizadorContainer, fieldset, detalles, botones);
 

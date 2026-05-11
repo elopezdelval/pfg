@@ -34,12 +34,26 @@ export default function endpointsQuedadas(app, db) {
 
     //endpoint para obtener las quedadas para el tablón
 
-    app.get('/api/auth/obtenerQuedadas', (req, res, next) => {
+    app.get('/api/auth/obtenerQuedadasTablon', (req, res, next) => {
         const usuario = req.usuario.id;
 
         //Llamamos a la función obtener_quedadas, definida en la bbdd para obtener los datos necesarios para el tablón de quedadas
 
-        db.query('SELECT * FROM obtener_quedadas($1)', [usuario])
+        db.query('SELECT * FROM obtener_quedadas($1) WHERE fecha > NOW()', [usuario])
+            .then(r => {
+                res.json(r.rows);
+            })
+            .catch(next);
+    });
+
+    //endpoint para obtener las quedadas para mi actividad
+
+    app.get('/api/auth/obtenerQuedadasUsuario', (req, res, next) => {
+        const usuario = req.usuario.id;
+
+        //Llamamos a la función obtener_quedadas, definida en la bbdd para obtener los datos necesarios para el tablón de quedadas
+
+        db.query('SELECT * FROM obtener_quedadas($1) WHERE apuntado = true ORDER BY fecha DESC', [usuario])
             .then(r => {
                 res.json(r.rows);
             })
@@ -106,6 +120,18 @@ export default function endpointsQuedadas(app, db) {
                 res.json(r.rows[0]);
             })
                 .catch(next);
+            })
+            .catch(next);
+    });
+
+    //endpoint para obtener los usuarios apuntados a una quedada
+
+    app.get('/api/participantesQuedada', (req, res, next) => {
+        const idQuedada = req.query.idQuedada;
+
+        db.query('SELECT * FROM usuarios_apuntados($1)', [idQuedada])
+            .then(r => {
+                res.json(r.rows);
             })
             .catch(next);
     });

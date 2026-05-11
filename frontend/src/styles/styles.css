@@ -462,6 +462,15 @@ a {
   padding: 1em;
 }
 
+.antigua {
+  opacity: 75%;
+  background-color: #26972655;
+}
+
+button.antigua {
+  display: none;
+}
+
 .organizadorContainer {
   display: flex;
 }
