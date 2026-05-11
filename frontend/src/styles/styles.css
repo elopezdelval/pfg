@@ -501,6 +501,7 @@ button.antigua {
 
 .tablon-botones {
   display: flex;
+  flex-wrap: wrap;
 }
 
 #contenedorMapa {
