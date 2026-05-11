@@ -12,6 +12,7 @@ export default function iniciarNav() {
   });
 
   //Cada vez que cambiamos de pantalla, al cargar el nav, si hay mensajes nuevos, cargamos la animación de que hay mensajes nuevos
+  
   fetch("/api/auth/obtenerMensajes")
     .then((r) => {
       if (!r.ok) {

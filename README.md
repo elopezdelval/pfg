@@ -34,7 +34,7 @@ Incluye autenticación JWT, persistencia de rutas geográficas, integración con
 * Bandejas de mensajes recibidos, enviados y eliminados
 * Marcado de mensajes como leídos y borrado lógico
 * Renderizado de rutas en mapas interactivos
-* Control de acceso mediante JWT y cookies seguras
+* Control de acceso mediante JWT y cookies
 
 ---
 
@@ -133,7 +133,7 @@ Se optó por una arquitectura con JavaScript vanilla para centrar el proyecto en
 
 #### Autenticación
 
-La autenticación se resolvió con JWT en cookies httpOnly para gestionar la sesión de forma sencilla y evitar exponer el token directamente al cliente.
+La autenticación se resolvió con JWT en cookies httpOnly para gestionar la sesión de forma sencilla sin necesidad de pasar por la base de datos.
 
 #### Lógica SQL
 

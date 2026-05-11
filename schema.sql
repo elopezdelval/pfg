@@ -66,7 +66,7 @@ $$;
 ALTER FUNCTION "public"."eliminar_mensajes"("p_mensaje_id" integer, "p_usuario_id" integer) OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."guardar_quedada"("p_datos" "jsonb", "p_region_id" integer, "p_distancia" numeric, "p_tipo_actividad" "text", "p_ritmo" "text", "p_descripcion" "text", "p_fecha" "date", "p_creado_por" "text") RETURNS integer
+CREATE OR REPLACE FUNCTION "public"."guardar_quedada"("p_datos" "jsonb", "p_region_id" integer, "p_distancia" numeric, "p_tipo_actividad" "text", "p_ritmo" "text", "p_descripcion" "text", "p_fecha" "timestamp", "p_creado_por" "text") RETURNS integer
     LANGUAGE "plpgsql"
     AS $$
 DECLARE
@@ -88,7 +88,7 @@ END;
 $$;
 
 
-ALTER FUNCTION "public"."guardar_quedada"("p_datos" "jsonb", "p_region_id" integer, "p_distancia" numeric, "p_tipo_actividad" "text", "p_ritmo" "text", "p_descripcion" "text", "p_fecha" "date", "p_creado_por" "text") OWNER TO "postgres";
+ALTER FUNCTION "public"."guardar_quedada"("p_datos" "jsonb", "p_region_id" integer, "p_distancia" numeric, "p_tipo_actividad" "text", "p_ritmo" "text", "p_descripcion" "text", "p_fecha" "timestamp", "p_creado_por" "text") OWNER TO "postgres";
 
 
 CREATE OR REPLACE FUNCTION "public"."obtener_datos_usuario"("p_usuario_id" integer) RETURNS TABLE("usuario" "text", "nombre" "text", "email" "text", "fecha_nacimiento" "date", "codigo_pais" "text", "region_id" integer)

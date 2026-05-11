@@ -20,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const feedback = document.getElementById("feedbackDialog");
   const alerta = document.getElementById("respuestaDialog");
   const cerrarDialog = document.getElementById("cerrarDialog");
+  const botonBuscarUsuarios = document.getElementById("botonBuscarUsuarios");
+  const formBuscarUsuarios = document.getElementById("formBuscarUsuarios");
+  const inputBuscarUsuarios = document.getElementById("inputBuscarUsuarios");
+  const contenedorUsuarios = document.getElementById("contenedorUsuarios");
+  const seleccionarUsuario = document.getElementById("seleccionarUsuario");
 
   //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
   
@@ -245,9 +250,81 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  //Si se pulsa el botón de la lupa en el formulario de enviar mensaje, abrimos un nuevo formulario para buscar usuarios con todos los usuarios cargados
+
+  //Definimos una función para meter los usuarios en el modal y una variable para almacenar el array de nombres de usuario
+
+  const mostrarUsuarios = (usuarios) => {
+    contenedorUsuarios.textContent = "";
+
+    for (const usuario of usuarios) {
+      contenedorUsuarios.insertAdjacentHTML(
+        "beforeend",
+        `<p>${usuario}</p>`
+      )
+    }
+  }
+
+  let usuarios = [];
+
+  //Aquí gestionamos la aparición del formulario para buscar usuarios y la carga inicial de los nombres
+
+  botonBuscarUsuarios.addEventListener("click", (event) => {
+    formBuscarUsuarios.style.display = "block";
+    
+    fetch("/api/buscarUsuarios")
+    .then(r => {
+      if (!r.ok) {
+        formBuscarUsuarios.style.display = "none";
+        throw new Error("no se han podido obtener los usuarios");
+      }
+      return r.json();
+    })
+    .then(respuesta => {
+      usuarios = respuesta.map((usuario) => usuario.usuario).sort();
+      mostrarUsuarios(usuarios);
+    })
+  })
+
+  //Cuando se selecciona un usuario, cambiamos el color y guardamos el nombre en una variable
+
+  let usuarioSeleccionado = "";
+  let elementoClickado;
+
+  contenedorUsuarios.addEventListener("click", (event) =>{
+    if (elementoClickado instanceof HTMLElement) {
+      elementoClickado.style.color = "#000";
+      elementoClickado.style.fontWeight = "normal";
+    }
+    elementoClickado = event.target;
+    usuarioSeleccionado = elementoClickado.textContent;
+    elementoClickado.style.color = "var(--verde-claro)";
+    elementoClickado.style.fontWeight = "bold";
+  })
+
+  //cuando se escribe en el input de buscar usuario, filtramos la lista
+
+  inputBuscarUsuarios.addEventListener("input", () => {
+    contenedorUsuarios.innerHTML = "";
+    const usuariosFiltrados = usuarios.filter((usuario) => {
+      return usuario.toLowerCase().includes(inputBuscarUsuarios.value.toLowerCase());
+    })
+    mostrarUsuarios(usuariosFiltrados);
+  });
+
+  //Al hacer click en seleccionar, cogemos el valor del elemento seleccionado, cerramos el formulario y vaciamos la variable
+
+  seleccionarUsuario.addEventListener("click", (event) => {
+    event.preventDefault();
+    formBuscarUsuarios.style.display = "none";
+    formRedactar.destinatarioRedactar.value = elementoClickado.textContent || "";
+  })
+
   //Añadimos el listener para enviar un mensaje y si todo va bien, recargamos los tablones para que aparezca en enviados
 
-  enviarMensaje.addEventListener("click", () => {
+  enviarMensaje.addEventListener("click", (event) => {
+    event.preventDefault();
+
     fetch("/api/auth/enviarMensaje", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

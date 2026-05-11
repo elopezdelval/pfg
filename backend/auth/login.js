@@ -49,4 +49,10 @@ export default function login(app, db) {
       })
       .catch(next);
   });
+
+  //Endpoint para cerrar sesión
+
+  app.post("/api/auth/cerrarSesión", (req, res, next) => {
+
+  })
 }

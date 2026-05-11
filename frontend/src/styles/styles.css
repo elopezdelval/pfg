@@ -582,6 +582,22 @@ a {
   padding: 0.2em 0.5em;
 }
 
+#contenedorLupa {
+  display: flex;
+}
+
+#botonBuscarUsuarios {
+  padding: 0 0.3em;
+  margin: 0 0 0.2em 0.1em;
+  border-radius: 0.3em;
+}
+
+#lupa {
+  margin: 0;
+  height: 1em;
+  width: 1em;
+}
+
 .correoLink {
   color: var(--verde);
   cursor: pointer;
@@ -644,7 +660,7 @@ a {
   display: none;
   margin: 0.5em;
   padding: 2em 1em 1em 1em;
-  background-color: var(--fondo);
+  background-color: var(--dialog);
   border: 1px solid var(--verde-claro);
   border-radius: 0.5em;
   box-shadow: 5px 5px 10px var(--verde);
@@ -668,6 +684,31 @@ a {
 
 #mensajeRedactar {
   height: 8em;
+}
+
+#formBuscarUsuarios {
+  display: none;
+  margin: 0.5em;
+  padding: 1em;
+  background-color: var(--dialog);
+  border: 1px solid var(--texto-oscuro);
+  border-radius: 0.5em;
+  box-shadow: 5px 5px 10px var(--verde);
+  width: 80vw;
+  height: fit-content;
+  position: fixed;
+  inset: 0;
+  margin: 200px auto;
+  z-index: 1000;
+  max-width: 280px;
+}
+
+#contenedorUsuarios {
+  padding: 0.2em 1em;
+  background-color: white;
+  border-radius: 0.5em;
+  overflow: scroll;
+  max-height: 200px;
 }
 
 

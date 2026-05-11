@@ -199,4 +199,14 @@ export default function endpointsUsuarios(app, db) {
       })
       .catch(next);
   });
+
+  app.get("/api/buscarUsuarios", (req, res, next) => {
+    db.query("SELECT usuario FROM usuarios")
+    .then(r => {
+      res.status(200).json(r.rows);
+    })
+    .catch(err => {
+      next(err);
+    })
+  });
 }

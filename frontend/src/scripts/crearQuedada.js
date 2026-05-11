@@ -5,9 +5,7 @@ import { selectorRegion, obtenerRegiones } from "./shared/region.js";
 import caminoGH from "./shared/caminoGH.js";
 import cargarMapa from "./shared/cargarMapa.js";
 
-
 document.addEventListener("DOMContentLoaded", () => {
-
   const form = document.getElementById("formQuedada");
   const distanciaRuta = document.getElementById("distanciaRuta");
   const borrarTramo = document.getElementById("borrarTramo");
@@ -16,12 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const feedback = document.getElementById("feedbackDialog");
   const alerta = document.getElementById("respuestaDialog");
   const cerrarDialog = document.getElementById("cerrarDialog");
-  
+
   iniciarNav();
   selectorRegion();
 
   //Definimos una función para mostrar los mensajes de feedback de error / éxito al usuario y el listener para cerrar el dialog
-  
+
   function mostrarDialog(mensaje) {
     alerta.textContent = mensaje;
     feedback.showModal();
@@ -189,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cambiarMapa();
   });
 
-  //Guardar quedada
+  //Guardar quedada, una vez creada, apuntamos al organizador a la quedada
 
   guardarQuedada.addEventListener("click", () => {
     const ruta = {
@@ -227,8 +225,24 @@ document.addEventListener("DOMContentLoaded", () => {
           mostrarDialog("Error guardando la quedada, intentelo más tarde");
           throw new Error("Error guardando la quedada");
         }
-        mostrarDialog("Quedada creada correctamente");
+        return r.json();
       })
-      .catch(() => {});
+      .then((respuesta) => {
+        fetch("/api/auth/unirseQuedada", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: respuesta.id,
+            apuntado: false,
+          }),
+        }).then((resp) => {
+          if (!resp.ok) {
+            mostrarDialog("Error apuntando al usuario");
+            throw new Error("Error apuntando al usuario");
+          }
+          mostrarDialog("Quedada creada correctamente");
+        });
+      })
+      .catch((err) => {console.log(err)});
   });
 });

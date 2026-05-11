@@ -42,7 +42,10 @@
             <button type="button" id="cerrarRedactar">X</button>
 
             <label for="destinatarioRedactar">Destinatario</label>
-            <input type="text" id="destinatarioRedactar" name="destinatarioRedactar">
+            <div id="contenedorLupa">
+                <input type="text" id="destinatarioRedactar" name="destinatarioRedactar">
+                <button type="button" id="botonBuscarUsuarios"><img id="lupa" src="/img/lupa-blanca.png" alt=""></button>
+            </div>
 
             <label for="asuntoRedactar">Asunto</label>
             <input type="text" id="asuntoRedactar" name="asuntoRedactar">
@@ -51,6 +54,13 @@
             <textarea name="mensajeRedactar" id="mensajeRedactar"></textarea>
 
             <button type="button" id="enviarMensaje">Enviar</button>
+        </form>
+        <form action="" id="formBuscarUsuarios">
+            <label for="buscarUsuarios">Busca al destinatario</label>
+            <input type="text" id="inputBuscarUsuarios" name="buscarUsuarios">
+            <label for="">Selecciona al destinatario</label>
+            <div id="contenedorUsuarios"></div>
+            <button type="button" id="seleccionarUsuario">Seleccionar</button>
         </form>
         <div id="contenedorMensaje">
 

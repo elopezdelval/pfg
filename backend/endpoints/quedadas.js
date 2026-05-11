@@ -24,7 +24,10 @@ export default function endpointsQuedadas(app, db) {
             [ruta, quedada.region, ruta.distancia, quedada.actividad, quedada.ritmo, quedada.descripcion, quedada.fecha, usuario]
         )
             .then(r => {
-                res.status(201).json({ message: 'Quedada guardada con éxito'});
+                res.status(201).json({ 
+                    id: r.rows[0].id, 
+                    message: 'Quedada guardada con éxito'
+                });
             })
             .catch(next);
     });
