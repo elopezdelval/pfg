@@ -187,10 +187,11 @@ export default function endpointsUsuarios(app, db) {
           throw new Error(r.error);
         }
 
-        //guardamos la url de la imagen en la bbdd
+        //guardamos la url de la imagen en la bbdd. Añadimos un query param con la fecha para que la url cambie cuando cambiamos el avatar y así evitamos que se cargue la imagen antigua desde memoria cache
+
         return db
           .query("UPDATE usuarios SET avatar_url = $1 WHERE id = $2", [
-            `${process.env.SUPABASE_URL}/storage/v1/object/public/Avatares/avatar_${usuario.id}.png`,
+            `${process.env.SUPABASE_URL}/storage/v1/object/public/Avatares/avatar_${usuario.id}.png?${new Date()}`,
             usuario.id,
           ])
           .then((r) => {
