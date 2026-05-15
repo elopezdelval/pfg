@@ -209,7 +209,3 @@ docker-compose up
 La aplicación quedará disponible en `http://localhost:3000`.
 
 En producción, el contenedor arranca con `NODE_ENV=production` y Express sirve el contenido generado en `frontend/dist`.
-
-La aplicación quedará disponible en `http://localhost:3000`.
-
-En producción, el contenedor arranca con `NODE_ENV=production` y Express sirve el contenido generado en `frontend/dist`.
