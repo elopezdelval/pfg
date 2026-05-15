@@ -41,7 +41,7 @@ export function obtenerRegiones(pais) {
     })
     .then((provincias) => {
       //Cargamos todas las regiones como option en el select regiones y lo activamos
-      region.innerHTML = '<option disabled selected>Elige tu region</option>';
+      region.innerHTML = '<option value="" disabled selected>Elige tu region</option>';
       
       for (const provincia of provincias) {
         const linea = document.createElement("option");

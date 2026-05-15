@@ -6,6 +6,8 @@ Aplicación web para organización de actividades deportivas (ciclismo, running 
 
 Incluye autenticación JWT, persistencia de rutas geográficas, integración con APIs externas y despliegue dockerizado.
 
+Demo disponible en **https://pfg-pvjz.onrender.com**
+
 ---
 
 ## Stack

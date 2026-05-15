@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (const usuario of usuarios) {
       contenedorUsuarios.insertAdjacentHTML(
         "beforeend",
-        `<p>${usuario}</p>`
+        `<p class="destinatario">${usuario}</p>`
       )
     }
   }

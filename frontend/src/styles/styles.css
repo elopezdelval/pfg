@@ -726,6 +726,10 @@ button.antigua {
   max-height: 200px;
 }
 
+.destinatario {
+  cursor: pointer;
+}
+
 
 /* media query para TABLETS */
 
