@@ -147,14 +147,19 @@ Parte de la lógica de consulta se trasladó a funciones SQL para mantener los e
 
 ### Requisitos previos
 
-Para levantar el proyecto es necesario disponer de:
-
-* Node.js 22 o compatible
-* npm
 * Un proyecto de Supabase con base de datos PostgreSQL accesible
 * Un bucket público `Avatares` en Supabase Storage
 * Una API key de Graphhopper
 * Una cuenta SMTP compatible con Nodemailer para la recuperación de contraseña
+
+#### Para levantar el proyecto es necesario disponer de:
+
+* Node.js 22 o compatible
+* npm
+
+#### Para levantar el proyecto en modo producción es necesario:
+
+* docker y docker-compose
 
 ### Variables de entorno
 
@@ -194,18 +199,16 @@ Esto lanza:
 
 En desarrollo, el backend se ejecuta con `NODE_ENV=development` y actúa solo como API. Vite redirige las peticiones `/api` al backend mediante proxy.
 
-### Ejecución en producción
+### Ejecución en modo producción
 
-Generar antes el build del frontend:
-```bash
-cd frontend
-npm run build
-```
-
-Levantar contenedores desde la raíz:
+Levantar contenedor desde la raíz:
 ```bash
 docker-compose up
 ```
+
+La aplicación quedará disponible en `http://localhost:3000`.
+
+En producción, el contenedor arranca con `NODE_ENV=production` y Express sirve el contenido generado en `frontend/dist`.
 
 La aplicación quedará disponible en `http://localhost:3000`.
 
