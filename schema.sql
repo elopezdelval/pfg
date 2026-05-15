@@ -138,7 +138,7 @@ $$;
 ALTER FUNCTION "public"."obtener_mensajes"("p_usuario_id" integer) OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) RETURNS TABLE("id" integer, "actividad" "text", "region" "text", "distancia" numeric, "fecha" timestamp without time zone, "organizador" "text", "avatar_url" "text", "ritmo" "text", "descripcion" "text", "idruta" integer, "ruta" "jsonb", "usuario" "text", "apuntado" boolean)
+CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) RETURNS TABLE("id" integer, "actividad" "text", "region" "text", "distancia" numeric, "fecha_real" timestamp without time zone, "fecha" "text", "organizador" "text", "avatar_url" "text", "ritmo" "text", "descripcion" "text", "idruta" integer, "ruta" "jsonb", "usuario" "text", "apuntado" boolean)
     LANGUAGE "sql"
     AS $$
   select
@@ -147,6 +147,7 @@ CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) R
     rg.nombre,
     rt.distancia,
     q.fecha,
+    to_char(q.fecha, 'YYYY-MM-DD"T"HH24:MI:SS'),
     u.usuario,
     u.avatar_url,
     q.ritmo,

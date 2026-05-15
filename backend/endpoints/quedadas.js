@@ -39,7 +39,7 @@ export default function endpointsQuedadas(app, db) {
 
         //Llamamos a la función obtener_quedadas, definida en la bbdd para obtener los datos necesarios para el tablón de quedadas
 
-        db.query('SELECT * FROM obtener_quedadas($1) WHERE fecha > NOW()', [usuario])
+        db.query('SELECT * FROM obtener_quedadas($1) WHERE fecha_real > NOW()', [usuario])
             .then(r => {
                 res.json(r.rows);
             })
@@ -53,7 +53,7 @@ export default function endpointsQuedadas(app, db) {
 
         //Llamamos a la función obtener_quedadas, definida en la bbdd para obtener los datos necesarios para el tablón de quedadas
 
-        db.query('SELECT * FROM obtener_quedadas($1) WHERE apuntado = true ORDER BY fecha DESC', [usuario])
+        db.query('SELECT * FROM obtener_quedadas($1) WHERE apuntado = true ORDER BY fecha_real DESC', [usuario])
             .then(r => {
                 res.json(r.rows);
             })
