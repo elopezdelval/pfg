@@ -138,7 +138,7 @@ $$;
 ALTER FUNCTION "public"."obtener_mensajes"("p_usuario_id" integer) OWNER TO "postgres";
 
 
-CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) RETURNS TABLE("id" integer, "actividad" "text", "region" "text", "distancia" numeric, "fecha" timestamp without time zone, "organizador" "text", "avatar_url" "text", "ritmo" "text", "descripcion" "text", "idruta" integer, "ruta" "jsonb", "apuntado" boolean)
+CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) RETURNS TABLE("id" integer, "actividad" "text", "region" "text", "distancia" numeric, "fecha" timestamp without time zone, "organizador" "text", "avatar_url" "text", "ritmo" "text", "descripcion" "text", "idruta" integer, "ruta" "jsonb", "usuario" "text", "apuntado" boolean)
     LANGUAGE "sql"
     AS $$
   select
@@ -153,6 +153,7 @@ CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) R
     q.descripcion,
     q.ruta_id,
     rt.datos,
+    us.usuario,
     exists (
       select 1
       from usuarios_quedadas uq
@@ -163,6 +164,7 @@ CREATE OR REPLACE FUNCTION "public"."obtener_quedadas"("p_usuario_id" integer) R
   join rutas rt on rt.id = q.ruta_id
   join regiones rg on rg.id = rt.region_id
   join usuarios u on u.id = q.creado_por
+  join usuarios us on us.id = p_usuario_id
   order by q.fecha asc;
 $$;
 
@@ -924,4 +926,3 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 
 
 drop extension if exists "pg_net";
-

@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //introducimos data-indice en los botones para saber a que posición del array se corresponde la quedada
 
   let apuntarse = "";
+  let esOrganizador = "";
 
   fetch("/api/auth/obtenerQuedadasTablon")
     .then((r) => {
@@ -73,7 +74,14 @@ document.addEventListener("DOMContentLoaded", () => {
           quedadas[i].avatar_url = '/img/avatar.png';
         }
 
-        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse));
+        //Si el usuario es organizador de la quedada añadimos la clase para no mostrar el boton de enviar mensaje
+        if (quedadas[i].organizador === quedadas[i].usuario) {
+          esOrganizador = "esOrganizador"
+        } else {
+          esOrganizador = "no"
+        }
+
+        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse, "nueva", esOrganizador));
       }
     })
     .catch(() => {
@@ -106,7 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           apuntarse = "apuntarse";
         }
-        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse));
+
+        //Si el usuario es organizador de la quedada añadimos la clase para no mostrar el boton de enviar mensaje
+        if (quedadas[i].organizador === quedadas[i].usuario) {
+          esOrganizador = "esOrganizador"
+        } else {
+          esOrganizador = "no"
+        }
+        tablon.appendChild(htmlQuedada(quedadas[i], i, apuntarse, "nueva", esOrganizador));
       }
     }
   });

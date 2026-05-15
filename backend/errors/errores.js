@@ -19,6 +19,7 @@ export default function errores(app) {
     //Si el error lo ha creado la propia app, lo enviamos tal cual
 
     if (err instanceof AppError) {
+      console.log(err);
       return sendError(res, err);
     }
 

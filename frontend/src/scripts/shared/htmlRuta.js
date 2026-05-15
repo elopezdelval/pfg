@@ -7,7 +7,7 @@ export default function htmlRuta(r, i) {
 
   const encabezado = document.createElement("span");
   encabezado.className = "ruta-encabezado";
-  encabezado.textContent = `Región: ${r.region}`;
+  encabezado.textContent = `${r.actividad}: ${r.region}`;
 
   const distancia = document.createElement("span");
   distancia.textContent = `distancia: ${(r.distancia / 1000).toFixed(1)}km`;

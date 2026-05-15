@@ -145,7 +145,7 @@ Parte de la lógica de consulta se trasladó a funciones SQL para mantener los e
 
 ### Requisitos previos
 
-Antes de ejecutar el proyecto es necesario disponer de:
+Para levantar el proyecto es necesario disponer de:
 
 * Node.js 22 o compatible
 * npm

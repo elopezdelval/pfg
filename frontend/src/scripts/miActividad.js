@@ -53,6 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
   //Llamamos al back para cargar las quedadas y pintamos aquellas en las que el usuario esté apuntado
 
   let quedadas = [];
+  let esOrganizador = "";
+  let antigua = "";
 
   fetch("/api/auth/obtenerQuedadasUsuario")
     .then((r) => {
@@ -73,12 +75,24 @@ document.addEventListener("DOMContentLoaded", () => {
             quedadas[i].avatar_url = "/img/avatar.png";
           }
 
-          let antigua = "nueva";
+          //Si la fecha de la quedada es anterior a hoy, añadimos la clase antigua
+          
           if (new Date(quedadas[i].fecha) < new Date()) {
             antigua = "antigua";
+          } else {
+            antigua = "nueva";
           }
 
-          misQuedadas.appendChild(htmlQuedada(quedadas[i], i, apuntarse, antigua));
+          //Si el usuario es organizador de la quedada añadimos la clase para no mostrar el boton de enviar mensaje
+          if (quedadas[i].organizador === quedadas[i].usuario) {
+            esOrganizador = "esOrganizador";
+          } else {
+            esOrganizador = "no";
+          }
+
+          misQuedadas.appendChild(
+            htmlQuedada(quedadas[i], i, apuntarse, antigua, esOrganizador),
+          );
         }
       }
     })
@@ -153,21 +167,26 @@ document.addEventListener("DOMContentLoaded", () => {
       const idQuedada = quedadas[indice].id;
 
       fetch(`/api/participantesQuedada?idQuedada=${idQuedada}`)
-      .then((r) => {
+        .then((r) => {
           if (!r.ok) {
             throw new Error("Error obteniendo a los apuntados");
           }
           return r.json();
-      })
-      .then(respuesta => {
-        const participantes = respuesta.map((participantes) => participantes.usuario);
-        respuestaDialog.textContent = "";
+        })
+        .then((respuesta) => {
+          const participantes = respuesta.map(
+            (participantes) => participantes.usuario,
+          );
+          respuestaDialog.textContent = "";
 
-        for (const participante of participantes) {
-          respuestaDialog.insertAdjacentHTML("beforeend", `<p>- ${participante}</p>`);
-        }
-        feedbackDialog.showModal();
-      })
+          for (const participante of participantes) {
+            respuestaDialog.insertAdjacentHTML(
+              "beforeend",
+              `<p>- ${participante}</p>`,
+            );
+          }
+          feedbackDialog.showModal();
+        });
     }
   });
 

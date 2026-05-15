@@ -40,7 +40,7 @@ export default function login(app, db) {
             res.cookie("token", token, {
               httpOnly: true,
               sameSite: "strict",
-              secure: "true"
+              secure: true
             });
 
             console.log(`Login exitoso: ${credenciales.usuario}`);
@@ -49,10 +49,4 @@ export default function login(app, db) {
       })
       .catch(next);
   });
-
-  //Endpoint para cerrar sesión
-
-  app.post("/api/auth/cerrarSesión", (req, res, next) => {
-
-  })
 }

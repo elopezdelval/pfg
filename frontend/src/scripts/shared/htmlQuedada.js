@@ -1,4 +1,4 @@
-export default function htmlQuedada(q, i, apuntarse, antigua) {
+export default function htmlQuedada(q, i, apuntarse, antigua, esOrganizador) {
 
 //Esta función genera un html reutilizable para renderizar las quedadas, se van creando los elementos y metiendoles el contenido como texto con textContent para evitar posibles xss
 
@@ -32,7 +32,7 @@ export default function htmlQuedada(q, i, apuntarse, antigua) {
 
   const enviarMensaje = document.createElement("button");
   enviarMensaje.textContent = "enviar mensaje";
-  enviarMensaje.classList.add("enviarMensaje", antigua);
+  enviarMensaje.classList.add("enviarMensaje", antigua, esOrganizador);
   enviarMensaje.dataset.indice = i;
 
   organizador.append(textoOrganizador, avatar, nombreOrganizador);

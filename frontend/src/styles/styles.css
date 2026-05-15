@@ -440,7 +440,7 @@ a {
 }
 
 #leyenda {
-  font-size: 1.5em;
+  font-size: 1em;
 }
 
 #leyenda:hover {
@@ -465,6 +465,10 @@ a {
 .antigua {
   opacity: 75%;
   background-color: #26972655;
+}
+
+.esOrganizador {
+  display: none;
 }
 
 button.antigua {

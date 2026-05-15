@@ -2,36 +2,36 @@
 
 La aplicación utiliza PostgreSQL desplegado en Supabase como base de datos.
 
-Además del motor PostgreSQL, Supabase también se utiliza para el almacenamiento de avatares.
+Además de PostgreSQL, también se utiliza Supabse para almacenar los avatares.
 
 ## Esquema versionado
 
-La estructura SQL del proyecto está versionada en el repositorio mediante el archivo 
+La estructura SQL del proyecto (tablas, funciones, etc) está versionada en el repositorio mediante el archivo 
 
-**schema.sql**
+**`schema.sql`**
 
-Esta migración permite recrear la estructura de la base de datos en otro entorno con credenciales propias.
+La migración permite recrear la base de datos en otro entorno.
 
 ## Tablas principales
 
-* **usuarios**: almacena credenciales, datos de perfil, región y URL del avatar.
-* **rutas**: guarda rutas generadas, incluyendo distancia y coordenadas persistidas.
+* **usuarios**: almacena las credenciales, los datos de perfil, la región y la URL del avatar.
+* **rutas**: guarda las rutas generadas, incluyendo coordenadas.
 * **quedadas**: registra las actividades publicadas por los usuarios.
-* **mensajes**: almacena la mensajería interna entre usuarios.
+* **mensajes**: almacena los mensajes que se envían los usuarios.
 
 ## Tablas de relación
 
 * **usuarios_quedadas**: relaciona usuarios con las quedadas a las que se apuntan.
-* **usuarios_rutas**: relaciona usuarios con rutas guardadas.
+* **usuarios_rutas**: relaciona usuarios con rutas que hayan guardado.
 
 ## Tablas auxiliares
 
-* **regiones** y **paises**: alimentan los selectores geográficos del frontend.
-* **recuperar_pass**: guarda los tokens temporales de recuperación de contraseña.
+* **regiones** y **paises**: sirven para cargar los datos en los selectores del frontend.
+* **recuperar_pass**: guarda token, usuario y fecha/hora de validez para el cambio de contraseña.
 
 ## Funciones SQL usadas por el backend
 
-El backend no depende solo de tablas. También utiliza funciones SQL ya definidas en la base de datos:
+Para dejar más limpio el backend, para las consultas complejas se utilizan funciones SQL definidas en la base de datos:
 
 * **obtener_datos_usuario(id_usuario)**
 * **guardar_quedada(ruta, region, distancia, actividad, ritmo, descripcion, fecha, usuario)**
@@ -39,32 +39,24 @@ El backend no depende solo de tablas. También utiliza funciones SQL ya definida
 * **obtener_rutas(id_usuario)**
 * **obtener_mensajes(id_usuario)**
 * **eliminar_mensajes(id_mensaje, id_usuario)**
+* **usuarios_apuntados(quedada_id)**
 
-Estas funciones encapsulan parte importante de la lógica de lectura y escritura. Para reproducir el proyecto en otro entorno hay que recrear estas funciones.
+Para que el proyecto funcione en otro entorno hay que recrear también estas funciones.
 
 ## Avatares en Supabase Storage
 
-Los avatares no se guardan dentro de PostgreSQL.
+Los avatares no se guardan directamente dentro de PostgreSQL.
 
-Se almacenan en un bucket público llamado **Avatares** en Supabase Storage y en la tabla **usuarios** se persiste la URL pública del archivo.
-
-## Dependencias externas
-
-Para que la base de datos funcione correctamente en un entorno nuevo, como mínimo hay que preparar:
-
-* una base PostgreSQL accesible desde el backend
-* las tablas anteriores
-* las funciones SQL utilizadas por el backend
-* el bucket **Avatares** en Supabase Storage
+Se utiliza el almacenamiento de Supabase en un directorio **Avatares** y en la tabla **usuarios** se guarda la URL pública del archivo a la que se puede acceder directamente desde el frontend.
 
 ## Reproducir la base de datos en otro entorno
 
-El repositorio permite reproducir la estructura de la base de datos, pero no clona automáticamente todo el proyecto real de Supabase.
+El esquema facilitado permite reproducir la estructura de la base de datos con tablas y funciones.
 
 Para levantarla en otro entorno hace falta:
 
 * crear un proyecto nuevo en Supabase
 * aplicar el esquema de **schema.sql**
-* configurar en el **.env** las credenciales propias
+* Introducir en el **.env** las credenciales propias
 * crear un bucket público **Avatares**
 * cargar datos base de las regiones que se quiera presentar en **paises** y **regiones**
